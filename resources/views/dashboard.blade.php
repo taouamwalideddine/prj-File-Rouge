@@ -395,7 +395,7 @@
 
   reviewQuiz.addEventListener('click', () => {
     hideSuccess();
-// empty
+    // empty
 });
 
   goHome.addEventListener('click', () => {
