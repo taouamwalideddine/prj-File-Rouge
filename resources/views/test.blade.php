@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QuizHub - Student Dashboard</title>
-    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
     <style>
         .transition-transform {
@@ -178,11 +179,153 @@
                 </div>
             </div>
 
-            <h3 class="text-lg font-bold text-gray-800 mb-4">Available Quizzes</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+<h3 class="text-lg font-bold text-gray-800 mb-4">Available Quizzes</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="bg-white rounded-lg shadow overflow-hidden hover-lift transition-transform quiz-card">
+        <div class="h-36 bg-indigo-600 relative">
+            <div class="absolute inset-0 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-white opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+            </div>
+            <div class="absolute bottom-0 left-0 p-4">
+                <h4 class="text-lg font-bold text-white">Algebra Basics</h4>
+                <p class="text-indigo-100">Mathematics 101</p>
+            </div>
+            <div class="card-overlay absolute inset-0 bg-indigo-800 bg-opacity-30 flex items-center justify-center">
+                <span class="text-white font-bold text-xl">Preview</span>
+            </div>
+        </div>
+        <div class="p-4">
+            <div class="text-gray-500 mb-1">Questions: 10</div>
+            <div class="text-gray-500 mb-4">Time Limit: 15 minutes</div>
+            <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md shadow-sm transform transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-75 quiz-btn w-full">Take Quiz</button>
+        </div>
+    </div>
 
-            <div class="bg-white rounded-lg shadow overflow-hidden hover-lift transition-transform quiz-card relative">
-                    <div class="h-36 bg-indigo-600 relative">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-white opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V
+    <div class="bg-white rounded-lg shadow overflow-hidden hover-lift transition-transform quiz-card">
+        <div class="h-36 bg-red-500 relative">
+            <div class="absolute inset-0 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-white opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+            </div>
+            <div class="absolute bottom-0 left-0 p-4">
+                <h4 class="text-lg font-bold text-white">World War I</h4>
+                <p class="text-red-100">History Fundamentals</p>
+            </div>
+            <div class="card-overlay absolute inset-0 bg-red-800 bg-opacity-30 flex items-center justify-center">
+                <span class="text-white font-bold text-xl">Preview</span>
+            </div>
+        </div>
+        <div class="p-4">
+            <div class="text-gray-500 mb-1">Questions: 15</div>
+            <div class="text-gray-500 mb-4">Time Limit: 20 minutes</div>
+            <button class="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-md shadow-sm transform transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75 quiz-btn w-full">Take Quiz</button>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow overflow-hidden hover-lift transition-transform quiz-card">
+        <div class="h-36 bg-green-500 relative">
+            <div class="absolute inset-0 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-white opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+            </div>
+            <div class="absolute bottom-0 left-0 p-4">
+                <h4 class="text-lg font-bold text-white">Public Quiz</h4>
+                <p class="text-green-100">General Knowledge</p>
+            </div>
+            <div class="card-overlay absolute inset-0 bg-green-800 bg-opacity-30 flex items-center justify-center">
+                <span class="text-white font-bold text-xl">Preview</span>
+            </div>
+        </div>
+        <div class="p-4">
+            <div class="text-gray-500 mb-1">Questions: 20</div>
+            <div class="text-gray-500 mb-4">Time Limit: 30 minutes</div>
+            <button class="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md shadow-sm transform transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 quiz-btn w-full">Take Quiz</button>
+        </div>
+    </div>
+</div>
+
+<h3 class="text-lg font-bold text-gray-800 mb-4 mt-8">Upcoming Quizzes</h3>
+<div class="bg-white rounded-lg shadow-sm p-6">
+    <div class="overflow-x-auto">
+        <table class="min-w-full">
+            <thead>
+                <tr class="bg-gray-50">
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quiz Name</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Class</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Trigonometry Basics</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Mathematics 101</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">March 20, 2025</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">25 minutes</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Upcoming</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">World War II</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">History Fundamentals</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">March 25, 2025</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">30 minutes</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Upcoming</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<h3 class="text-lg font-bold text-gray-800 mb-4 mt-8">Recent Results</h3>
+<div class="bg-white rounded-lg shadow-sm p-6">
+    <div class="overflow-x-auto">
+        <table class="min-w-full">
+            <thead>
+                <tr class="bg-gray-50">
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quiz Name</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Class</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Introduction to Functions</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Mathematics 101</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">March 10, 2025</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">85%</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <button class="text-indigo-600 hover:text-indigo-900 transition-all">View Details</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Ancient Civilizations</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">History Fundamentals</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">March 8, 2025</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">92%</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <button class="text-indigo-600 hover:text-indigo-900 transition-all">View Details</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<footer class="mt-12 py-6 border-t border-gray-200">
+    <div class="text-center text-gray-500 text-sm">
+        <p>© 2025 QuizHub. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>
