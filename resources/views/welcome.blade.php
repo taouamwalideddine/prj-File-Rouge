@@ -117,21 +117,20 @@
         }
 
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+            0% { transform: translateY(-20px); }
+            50% { transform: translateY(10px); }
+            100% { transform: translateY(-20px); }
         }
 
         .floating {
-            animation: float 2s ease-in-out infinite;
+            animation: float 7s ease-in-out infinite;
         }
     </style>
 </head>
 <body class="h-screen flex">
-    <!-- Left Panel - Gradient Background -->
     <div class="hidden md:flex md:w-1/2 gradient-bg flex-col justify-between p-10">
         <div>
-            <h2 class="text-white text-2xl mb-2 floating">Quizhub</h2>
+            <h2 class="text-white text-3xl mb-2 floating">Quizhub</h2>
         </div>
 
         <div class="quote-text mb-20">
@@ -277,7 +276,6 @@
                 </div>
             </div>
 
-            <!-- Change Password Form -->
             <div id="change-password-form" class="form-section animate__animated animate__fadeIn">
                 <h2 class="text-2xl font-semibold mb-4">Change Password</h2>
                 <p class="text-gray-500 mb-8">Please enter your new password</p>
@@ -318,21 +316,17 @@
         }
 
         function selectRole(element, role) {
-            // Remove selected class from all options
+
             document.querySelectorAll('.role-option').forEach(option => {
                 option.classList.remove('selected');
             });
 
-            // Add selected class to clicked option
             element.classList.add('selected');
 
-            // Update hidden input value
             document.getElementById('role').value = role;
         }
 
-        // Add animation classes to form elements for a more polished look
         document.addEventListener('DOMContentLoaded', function() {
-            // Enhance form inputs with focus effects
             const inputs = document.querySelectorAll('input');
             inputs.forEach(input => {
                 input.addEventListener('focus', function() {
@@ -344,7 +338,6 @@
                 });
             });
 
-            // Add slight delay to initial form appearance for a smooth loading effect
             setTimeout(() => {
                 document.querySelector('.form-section.active').style.opacity = "1";
             }, 100);
