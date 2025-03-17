@@ -33,12 +33,12 @@ Ce projet a été conçu pour répondre à plusieurs objectifs pédagogiques :
 
 ### 1. Pour les étudiants :
 - S’inscrire et se connecter.
-- Consulter la liste des quiz publics.
+- Consulter la liste des quiz .
 - Demander à rejoindre une classe d’un enseignant.
 - Recevoir des notifications sur le site :
   - Lorsque leur demande est acceptée.
   - Lorsqu’un nouveau quiz est créé dans leur classe.
-- Participer à des quiz publics ou privés.
+- Participer à des quiz (uniquement dans les classes rejointes).
 - Voir leurs résultats après chaque quiz.
 - Commenter sur les quiz (optionnel).
 
