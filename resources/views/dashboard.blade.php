@@ -233,5 +233,175 @@
             </footer>
         </div>
     </div>
+
+    <div id="quiz-question" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ">
+  <div class="bg-white rounded-lg shadow-xl max-w-lg w-full mx-4">
+    <div class="p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-medium">Question 15</h2>
+        <button id="close-question" class="text-gray-400 hover:text-gray-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <p class="mb-6">You see a non-familiar face in the access-controlled areas of our office, the person does not have the MGL ID/Visitor/Staff/Vendor tag with him. What would you do?</p>
+
+      <div class="space-y-3 mb-8">
+        <label class="block">
+          <input type="radio" name="security-question" value="none" class="hidden peer">
+          <div class="border border-gray-300 rounded-lg p-4 peer-checked:border-blue-600 peer-checked:bg-blue-50 cursor-pointer">
+            None of my business, let some body else take care of it
+          </div>
+        </label>
+
+        <label class="block">
+          <input type="radio" name="security-question" value="ask" class="hidden peer">
+          <div class="border border-gray-300 rounded-lg p-4 peer-checked:border-blue-600 peer-checked:bg-blue-600 peer-checked:text-white cursor-pointer">
+            Ask the person to leave the facility
+          </div>
+        </label>
+
+        <label class="block">
+          <input type="radio" name="security-question" value="escort" class="hidden peer">
+          <div class="border border-gray-300 rounded-lg p-4 peer-checked:border-blue-600 peer-checked:bg-blue-50 cursor-pointer">
+            Escort the person to the security and raise a security incident
+          </div>
+        </label>
+
+        <label class="block">
+          <input type="radio" name="security-question" value="raise" class="hidden peer">
+          <div class="border border-gray-300 rounded-lg p-4 peer-checked:border-blue-600 peer-checked:bg-blue-50 cursor-pointer">
+            Raise a security incident and go back doing your work
+          </div>
+        </label>
+      </div>
+
+      <div class="flex justify-end">
+        <button id="submit-question" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="confirmation-dialog" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-lg shadow-xl max-w-sm w-full mx-4 p-6">
+    <div class="flex flex-col items-center text-center">
+      <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-4">
+        <span class="text-white text-2xl font-bold">?</span>
+      </div>
+      <p class="mb-6">Are you sure you want to submit quiz?</p>
+      <div class="flex space-x-4">
+        <button id="cancel-submit" class="px-6 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors">
+          No
+        </button>
+        <button id="confirm-submit" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="success-message" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-lg shadow-xl max-w-sm w-full mx-4 p-6">
+    <div class="flex flex-col items-center text-center">
+      <div class="mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500">
+          <path d="M8 6h8v8h-8z" fill="#FCD34D"></path>
+          <path d="M12 22l-8-4V6l8-4 8 4v12l-8 4z" stroke="#FCD34D" fill="none"></path>
+          <path d="M12 12v-4" stroke="#FCD34D"></path>
+          <path d="M12 12h4" stroke="#FCD34D"></path>
+        </svg>
+        <div class="absolute top-20 left-1/2 transform -translate-x-1/2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-500">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="#FCD34D" stroke="#FCD34D"></polygon>
+          </svg>
+        </div>
+      </div>
+      <h2 class="text-xl font-bold mb-2">Congratulations you have passed</h2>
+      <p class="mb-6">You scored 80%</p>
+      <div class="flex space-x-4">
+        <button id="review-quiz" class="px-6 py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50 transition-colors">
+          Review Quiz
+        </button>
+        <button id="go-home" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+          Go Home
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- temporary js -->
+<script>
+//   DOM practice
+  const quizQuestion = document.getElementById('quiz-question');
+  const closeQuestion = document.getElementById('close-question');
+  const submitQuestion = document.getElementById('submit-question');
+  const confirmationDialog = document.getElementById('confirmation-dialog');
+  const cancelSubmit = document.getElementById('cancel-submit');
+  const confirmSubmit = document.getElementById('confirm-submit');
+  const successMessage = document.getElementById('success-message');
+  const reviewQuiz = document.getElementById('review-quiz');
+  const goHome = document.getElementById('go-home');
+
+
+
+  // fonctions to show/hide popups
+  function showQuizQuestion() {
+    quizQuestion.classList.remove('hidden');
+  }
+
+  function hideQuizQuestion() {
+    quizQuestion.classList.add('hidden');
+  }
+
+  function showConfirmation() {
+    confirmationDialog.classList.remove('hidden');
+  }
+
+  function hideConfirmation() {
+    confirmationDialog.classList.add('hidden');
+  }
+
+  function showSuccess() {
+    successMessage.classList.remove('hidden');
+  }
+
+  function hideSuccess() {
+    successMessage.classList.add('hidden');
+  }
+
+  // Event listeners
+  closeQuestion.addEventListener('click', hideQuizQuestion);
+
+  submitQuestion.addEventListener('click', () => {
+    hideQuizQuestion();
+    showConfirmation();
+  });
+
+  cancelSubmit.addEventListener('click', () => {
+    hideConfirmation();
+    showQuizQuestion();
+  });
+
+  confirmSubmit.addEventListener('click', () => {
+    hideConfirmation();
+    showSuccess();
+  });
+
+  reviewQuiz.addEventListener('click', () => {
+    hideSuccess();
+// empty
+});
+
+  goHome.addEventListener('click', () => {
+    hideSuccess();
+    // empty
+  });
+</script>
 </body>
 </html>
