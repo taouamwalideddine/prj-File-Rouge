@@ -39,7 +39,6 @@
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
-    <!-- Navbar -->
     <nav class="gradient-bg text-white p-4 sticky top-0 z-50 shadow-lg">
         <div class="container mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-3">
@@ -62,13 +61,12 @@
         </div>
     </nav>
 
-    <!-- Sidebar -->
     <div class="flex">
         <div class="w-64 bg-#021024 shadow-lg min-h-screen pt-4">
             <div class="px-4 py-2">
                 <ul class="space-y-2">
                     <li>
-                        <a href="#" class="block px-4 py-3 rounded-md gradient-bg text-white hover:bg-indigo-700 transition-all flex items-center space-x-3">
+                        <a href="#" class="block px-4 py-3 rounded-md bg-#052659 hover:text-indigo-300   transition-all flex items-center space-x-3">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                             </svg>
@@ -76,7 +74,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="block px-4 py-3 rounded-md text-#C1EBFF hover:bg-#7DA0CA hover:bg-indtransition-all flex items-center space-x-3">
+                        <a href="#" class="block px-4 py-3 rounded-md text-#C1EBFF hover:bg-#7DA0CA hover:text-indigo-300   transition-all flex items-center space-x-3">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                             </svg>
@@ -84,7 +82,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="block px-4 py-3 rounded-md text-#C1EBFF hover:bg-#7DA0CA hover:text-white transition-all flex items-center space-x-3">
+                        <a href="#" class="block px-4 py-3 rounded-md text-#C1EBFF hover:bg-#7DA0CA hover:text-indigo-300   transition-all flex items-center space-x-3">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                             </svg>
@@ -92,7 +90,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="block px-4 py-3 rounded-md text-#C1EBFF hover:bg-#7DA0CA hover:text-white transition-all flex items-center space-x-3">
+                        <a href="#" class="block px-4 py-3 rounded-md text-#C1EBFF hover:bg-#7DA0CA hover:text-indigo-300   transition-all flex items-center space-x-3">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                             </svg>
@@ -100,7 +98,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="block px-4 py-3 rounded-md text-#C1EBFF hover:bg-#7DA0CA hover:text-white transition-all flex items-center space-x-3">
+                        <a href="#" class="block px-4 py-3 rounded-md text-#C1EBFF hover:bg-#7DA0CA hover:text-indigo-300  transition-all flex items-center space-x-3">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                             </svg>
@@ -111,14 +109,12 @@
             </div>
         </div>
 
-        <!-- Main Content -->
         <div class="flex-1 p-8">
             <div class="flex justify-between items-center mb-8">
                 <h2 class="text-3xl font-bold text-#021024">Student Dashboard</h2>
                 <button class="gradient-bg hover:bg-#7DA0CA text-white font-medium py-2 px-6 rounded-md shadow-lg transform transition-transform hover:scale-105 pulse">Request to Join a Class</button>
             </div>
 
-            <!-- Notifications -->
             <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
                 <h3 class="text-xl font-bold text-#021024 mb-4">Notifications</h3>
                 <div class="space-y-3">
@@ -131,7 +127,6 @@
                 </div>
             </div>
 
-            <!-- My Classes -->
             <h3 class="text-xl font-bold text-#021024 mb-6">My Classes</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div class="bg-white rounded-lg shadow hover-lift transition-transform p-6">
@@ -150,7 +145,6 @@
                 </div>
             </div>
 
-            <!-- Available Quizzes -->
             <h3 class="text-xl font-bold text-#021024 mb-6">Available Quizzes</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 <div class="bg-white rounded-lg shadow overflow-hidden hover-lift transition-transform quiz-card">
@@ -174,10 +168,8 @@
                         <button class="gradient-bg hover:bg-#7DA0CA text-white font-medium py-2 px-6 rounded-md shadow-lg transform transition-transform hover:scale-105 w-full">Take Quiz</button>
                     </div>
                 </div>
-                <!-- Repeat for other quizzes -->
             </div>
 
-            <!-- Upcoming Quizzes -->
             <h3 class="text-xl font-bold text-#021024 mb-6">Upcoming Quizzes</h3>
             <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
                 <div class="overflow-x-auto">
@@ -201,13 +193,11 @@
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Upcoming</span>
                                 </td>
                             </tr>
-                            <!-- Repeat for other quizzes -->
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Recent Results -->
             <h3 class="text-xl font-bold text-#021024 mb-6">Recent Results</h3>
             <div class="bg-white rounded-lg shadow-sm p-6">
                 <div class="overflow-x-auto">
@@ -231,13 +221,11 @@
                                     <button class="text-#052659 hover:text-#7DA0CA transition-all">View Details</button>
                                 </td>
                             </tr>
-                            <!-- Repeat for other results -->
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Footer -->
             <footer class="mt-12 py-6 border-t border-#C1EBFF">
                 <div class="text-center text-#548383 text-sm">
                     <p>© 2025 QuizHub. All rights reserved.</p>
