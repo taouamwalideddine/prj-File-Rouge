@@ -271,7 +271,7 @@
 
         <label class="block">
           <input type="radio" name="security-question" value="raise" class="hidden peer">
-          <div class="border border-gray-300 rounded-lg p-4 peer-checked:border-blue-600 peer-checked:bg-blue-50 cursor-pointer">
+          <di class="border border-gray-300 rounded-lg p-4 peer-checked:border-blue-600 peer-checked:bg-blue-50 cursor-pointer">
             Raise a security incident and go back doing your work
           </div>
         </label>
