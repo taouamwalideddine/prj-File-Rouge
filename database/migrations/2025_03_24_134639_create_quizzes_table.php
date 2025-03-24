@@ -11,11 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('quizzes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('classroom_id')->constrained();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('quiz_id')->constrained();
-            $table->text('content');
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->enum('type', ['mcq', 'tf']);
+            $table->timestamp('available_at')->nullable();
+            $table->timestamp('expires_at')->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('quizzes');
     }
 };
