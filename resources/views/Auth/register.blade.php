@@ -206,17 +206,5 @@
             </div>
         </div>
     </div>
-
-    <script>
-        function showForm(formId) {
-            // Hide all forms
-            document.querySelectorAll('.form-section').forEach(form => {
-                form.classList.remove('active');
-            });
-
-            // Show the selected form
-            document.getElementById(formId).classList.add('active');
-        };
-    </script>
 </body>
 </html>

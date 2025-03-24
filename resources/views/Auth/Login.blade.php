@@ -154,69 +154,45 @@
                 </h1>
             </div>
 
-            <!-- Reset Password Form -->
-            <div id="reset-password-form" class="form-section active animate__animated animate__fadeIn">
-                <h2 class="text-2xl font-semibold mb-4">Reset Password</h2>
-                <p class="text-gray-500 mb-8">Please enter your email to receive a password reset link</p>
+            <!-- Login Form -->
+            <div id="login-form" class="form-section active animate__animated animate__fadeIn">
+                <h2 class="text-2xl font-semibold mb-4">Login to your Account</h2>
+                <p class="text-gray-500 mb-8">Please enter your credentials to access your account</p>
 
                 <form action="#" class="space-y-6">
                     <div>
-                        <label for="reset-email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                        <input type="email" name="reset-email" id="reset-email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                        <input type="email" name="email" id="email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
 
                     <div>
-                        <button type="button" onclick="showForm('change-password-form')" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-white btn-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Send Reset Link
+                        <div class="flex items-center justify-between mb-1">
+                            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                            <a href="#" onclick="showForm('reset-password-form')" class="text-sm text-blue-600 hover:underline link-hover">Forgot password?</a>
+                        </div>
+                        <input type="password" name="password" id="password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+
+                    <div class="flex items-center">
+                        <input type="checkbox" name="remember" id="remember" class="h-4 w-4 text-blue-600 border-gray-300 rounded">
+                        <label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
+                    </div>
+
+                    <div>
+                        <button type="submit" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-white btn-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Login
                         </button>
                     </div>
                 </form>
 
                 <div class="mt-8 text-center">
-                    <a href="#" onclick="showForm('login-form')" class="text-sm text-blue-600 hover:underline link-hover">Back to Login</a>
-                </div>
-            </div>
-
-            <!-- Change Password Form -->
-            <div id="change-password-form" class="form-section animate__animated animate__fadeIn">
-                <h2 class="text-2xl font-semibold mb-4">Change Password</h2>
-                <p class="text-gray-500 mb-8">Please enter your new password</p>
-
-                <form action="#" class="space-y-6">
-                    <div>
-                        <label for="new-password" class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
-                        <input type="password" name="new-password" id="new-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-
-                    <div>
-                        <label for="confirm-new-password" class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
-                        <input type="password" name="confirm-new-password" id="confirm-new-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-
-                    <div>
-                        <button type="button" onclick="showForm('login-form')" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-white btn-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Change Password
-                        </button>
-                    </div>
-                </form>
-
-                <div class="mt-8 text-center">
-                    <a href="#" onclick="showForm('login-form')" class="text-sm text-blue-600 hover:underline link-hover">Back to Login</a>
+                    <p class="text-sm text-gray-600">
+                        Don't have an account?
+                        <a href="#" onclick="showForm('register-form')" class="font-medium text-blue-600 hover:underline link-hover">Register Account</a>
+                    </p>
                 </div>
             </div>
         </div>
     </div>
-
-    <script>
-        function showForm(formId) {
-            // Hide all forms
-            document.querySelectorAll('.form-section').forEach(form => {
-                form.classList.remove('active');
-            });
-
-            // Show the selected form
-            document.getElementById(formId).classList.add('active');
-        };
-    </script>
 </body>
 </html>
