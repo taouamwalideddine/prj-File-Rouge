@@ -42,4 +42,12 @@ class User extends Authenticatable
     {
         return $this->role === 'admin';
     }
+
+    public function classroom(){
+        return $this->belongsToMany(classroom::class);
+    }
+
+    public function teacher(){
+        return $this->hasMany(classroom::class ,'teacher_id');
+    }
 }
