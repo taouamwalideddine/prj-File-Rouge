@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
+// auth
 Route::controller(LoginController::class)->group(function () {
     Route::get('login', 'showLoginForm')->name('login');
     Route::post('login', 'login');
@@ -18,13 +18,13 @@ Route::controller(RegisterController::class)->group(function () {
     Route::get('register', 'showRegistrationForm')->name('register');
     Route::post('register', 'register');
 });
-
+// teeacher
 Route::middleware(['auth', 'teacher'])->group(function () {
     Route::get('/teacher/dashboard', function () {
         return view('teacher.dashboard');
     })->name('teacher.dashboard');
 });
-
+// student
 Route::middleware(['auth', 'student'])->group(function () {
     Route::get('/student/dashboard', function () {
         return view('student.dashboard');
