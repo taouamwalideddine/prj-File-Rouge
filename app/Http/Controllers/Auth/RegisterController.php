@@ -38,7 +38,7 @@ class RegisterController extends Controller
             'role' => $request->role,
         ]);
 
-        Auth::login($user); // Fixed authentication
+        Auth::login($user); 
 
         return redirect($this->redirectPath($user));
     }
