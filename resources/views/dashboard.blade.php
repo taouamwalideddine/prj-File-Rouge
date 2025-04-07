@@ -335,73 +335,184 @@
   </div>
 </div>
 
+<!-- Quiz result -->
+<div id="quiz-results" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50  overflow-y-auto">
+  <div class="bg-white rounded-lg shadow-xl max-w-3xl w-full mx-4 my-8">
+    <div class="p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-#021024">Quiz Results: Algebra Basics</h2>
+        <button id="close-results" class="text-gray-400 hover:text-gray-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="flex justify-between items-center mb-6 p-4 bg-#C1EBFF rounded-lg">
+        <div>
+          <p class="text-lg font-medium">Your Score: <span class="font-bold">80%</span></p>
+          <p>Correct Answers: <span class="font-bold">8/10</span></p>
+        </div>
+        <div class="w-24 h-24 rounded-full bg-#052659 flex items-center justify-center">
+          <span class="text-3xl font-bold text-white">80%</span>
+        </div>
+      </div>
+
+      <!-- Question List with Corrections -->
+      <div class="space-y-6 mb-6">
+        <!-- Question 1 - Correct -->
+        <div class="border border-green-200 rounded-lg p-4 bg-green-50">
+          <div class="flex justify-between items-start mb-2">
+            <h3 class="font-bold text-#021024">Question 1</h3>
+            <span class="px-2 py-1 bg-green-500 text-white text-sm font-medium rounded-full">Correct</span>
+          </div>
+          <p class="mb-3">What is the value of x in the equation 2x + 5 = 15?</p>
+
+          <div class="mb-2">Your answer: <span class="font-medium text-green-700">x = 5</span></div>
+
+          <div class="mb-2">
+            <div class="font-medium mb-1">All options:</div>
+            <ul class="space-y-1 pl-5 list-disc">
+              <li class="text-gray-600">x = 4</li>
+              <li class="text-green-700 font-medium">x = 5 ✓</li>
+              <li class="text-gray-600">x = 6</li>
+              <li class="text-gray-600">x = 10</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Question 2 - Incorrect -->
+        <div class="border border-red-200 rounded-lg p-4 bg-red-50">
+          <div class="flex justify-between items-start mb-2">
+            <h3 class="font-bold text-#021024">Question 2</h3>
+            <span class="px-2 py-1 bg-red-500 text-white text-sm font-medium rounded-full">Incorrect</span>
+          </div>
+          <p class="mb-3">If f(x) = x² + 3x + 2, what is f(2)?</p>
+
+          <div class="mb-2">Your answer: <span class="font-medium text-red-700">f(2) = 10</span></div>
+
+          <div class="mb-2">
+            <div class="font-medium mb-1">All options:</div>
+            <ul class="space-y-1 pl-5 list-disc">
+              <li class="text-gray-600">f(2) = 8</li>
+              <li class="text-gray-600">f(2) = 11</li>
+              <li class="text-green-700 font-medium">f(2) = 12 ✓</li>
+              <li class="text-red-700 font-medium">f(2) = 10 ❌</li>
+            </ul>
+          </div>
+
+          <div class="mt-3 p-3 bg-white rounded border border-red-200">
+            <p class="font-medium text-#021024">Explanation:</p>
+            <p class="text-#548383">f(2) = 2² + 3(2) + 2 = 4 + 6 + 2 = 12</p>
+          </div>
+        </div>
+
+        <!-- More questions would go here in a real implementation -->
+      </div>
+
+      <div class="flex justify-between">
+        <button id="back-to-dashboard" class="px-6 py-2 border border-#052659 text-#052659 rounded-md hover:bg-#C1EBFF transition-colors">
+          Back to Dashboard
+        </button>
+        <button id="view-class-standings" class="gradient-bg hover:bg-#7DA0CA text-white px-6 py-2 rounded-md shadow-lg transform transition-transform hover:scale-105">
+          View Class Standings
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- temporary js -->
 <script>
 //   DOM practice
-  const quizQuestion = document.getElementById('quiz-question');
-  const closeQuestion = document.getElementById('close-question');
-  const submitQuestion = document.getElementById('submit-question');
-  const confirmationDialog = document.getElementById('confirmation-dialog');
-  const cancelSubmit = document.getElementById('cancel-submit');
-  const confirmSubmit = document.getElementById('confirm-submit');
-  const successMessage = document.getElementById('success-message');
-  const reviewQuiz = document.getElementById('review-quiz');
-  const goHome = document.getElementById('go-home');
+const quizQuestion = document.getElementById('quiz-question');
+const closeQuestion = document.getElementById('close-question');
+const submitQuestion = document.getElementById('submit-question');
+const confirmationDialog = document.getElementById('confirmation-dialog');
+const cancelSubmit = document.getElementById('cancel-submit');
+const confirmSubmit = document.getElementById('confirm-submit');
+const successMessage = document.getElementById('success-message');
+const reviewQuiz = document.getElementById('review-quiz');
+const goHome = document.getElementById('go-home');
+
+// added dom
+const quizResults = document.getElementById('quiz-results');
+const closeResults = document.getElementById('close-results');
+const backToDashboard = document.getElementById('back-to-dashboard');
+
+// function to show/hide existing popups
+function showQuizQuestion() {
+  quizQuestion.classList.remove('hidden');
+}
+
+function hideQuizQuestion() {
+  quizQuestion.classList.add('hidden');
+}
+
+function showConfirmation() {
+  confirmationDialog.classList.remove('hidden');
+}
+
+function hideConfirmation() {
+  confirmationDialog.classList.add('hidden');
+}
+
+function showSuccess() {
+  successMessage.classList.remove('hidden');
+}
+
+function hideSuccess() {
+  successMessage.classList.add('hidden');
+}
 
 
+function showQuizResults() {
+  quizResults.classList.remove('hidden');
+}
 
-  // fonctions to show/hide popups
-  function showQuizQuestion() {
-    quizQuestion.classList.remove('hidden');
-  }
+function hideQuizResults() {
+  quizResults.classList.add('hidden');
+}
 
-  function hideQuizQuestion() {
-    quizQuestion.classList.add('hidden');
-  }
 
-  function showConfirmation() {
-    confirmationDialog.classList.remove('hidden');
-  }
+// event listeners
+closeQuestion.addEventListener('click', hideQuizQuestion);
 
-  function hideConfirmation() {
-    confirmationDialog.classList.add('hidden');
-  }
-
-  function showSuccess() {
-    successMessage.classList.remove('hidden');
-  }
-
-  function hideSuccess() {
-    successMessage.classList.add('hidden');
-  }
-
-  // Event listeners
-  closeQuestion.addEventListener('click', hideQuizQuestion);
-
-  submitQuestion.addEventListener('click', () => {
-    hideQuizQuestion();
-    showConfirmation();
-  });
-
-  cancelSubmit.addEventListener('click', () => {
-    hideConfirmation();
-    showQuizQuestion();
-  });
-
-  confirmSubmit.addEventListener('click', () => {
-    hideConfirmation();
-    showSuccess();
-  });
-
-  reviewQuiz.addEventListener('click', () => {
-    hideSuccess();
-    // empty
+submitQuestion.addEventListener('click', () => {
+  hideQuizQuestion();
+  showConfirmation();
 });
 
-  goHome.addEventListener('click', () => {
-    hideSuccess();
-    // empty
-  });
+cancelSubmit.addEventListener('click', () => {
+  hideConfirmation();
+  showQuizQuestion();
+});
+
+confirmSubmit.addEventListener('click', () => {
+  hideConfirmation();
+  showSuccess();
+});
+
+reviewQuiz.addEventListener('click', () => {
+  hideSuccess();
+  showQuizResults(); d
+});
+
+goHome.addEventListener('click', () => {
+  hideSuccess();
+});
+
+// Event listeners for new popups
+closeResults.addEventListener('click', hideQuizResults);
+
+backToDashboard.addEventListener('click', () => {
+  hideQuizResults();
+});
+
+
+
+closeStandings.addEventListener('click', hideClassStandings);
+closeStandingsBtn.addEventListener('click', hideClassStandings);
 </script>
 </body>
 </html>

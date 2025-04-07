@@ -13,6 +13,8 @@ public function store(Request $request)
 {
     $request->validate(['name' => 'required|string|max:255']);
 
+// correction avec les statistic pour l'ensengient
+// voir les resultat de chaque quize avec les detail de
 
     $classroom = Classroom::create([
         'name' => $request->name,
