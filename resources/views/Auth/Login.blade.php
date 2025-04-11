@@ -154,7 +154,6 @@
                 </h1>
             </div>
 
-            <!-- Login Form -->
             <div id="login-form" class="form-section active animate__animated animate__fadeIn">
                 <h2 class="text-2xl font-semibold mb-4">Login to your Account</h2>
                 <p class="text-gray-500 mb-8">Please enter your credentials to access your account</p>
