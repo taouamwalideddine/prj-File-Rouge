@@ -30,3 +30,11 @@ Route::middleware(['auth', 'teacher'])->group(function () {
     })->name('teacher.dashboard');
 // addtional here
 });
+
+Route::middleware(['auth', 'student'])->group(function () {
+    Route::get('/student/dashboard', function () {
+        return view('student.dashboard');
+    })->name('student.dashboard');
+
+// addtional here
+});
