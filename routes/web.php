@@ -1,14 +1,14 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
+// Public Routes
 Route::get('/', function () {
-    return view('dashboard');
+    return view('welcome');
 });
 
+// Authentication Routes
 Route::controller(AuthController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'login');
@@ -18,6 +18,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
+// Protected Routes
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', function () {
         return view('admin.dashboard');
@@ -28,16 +29,15 @@ Route::middleware(['auth', 'teacher'])->group(function () {
     Route::get('/teacher/dashboard', function () {
         return view('teacher.dashboard');
     })->name('teacher.dashboard');
-// addtional here
 });
 
 Route::middleware(['auth', 'student'])->group(function () {
     Route::get('/student/dashboard', function () {
         return view('student.dashboard');
     })->name('student.dashboard');
-
-// addtional here
 });
+
+// Fallback Route
 Route::fallback(function () {
-    return redirect('/');
+    return redirect('/login');
 });
