@@ -1,27 +1,20 @@
 <?php
 
-use Illuminate\Foundation\Application;
-use Illuminate\Foundation\Configuration\Exceptions;
-use Illuminate\Foundation\Configuration\Middleware;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use Illuminate\Support\Facades\Route;
 
-return Application::configure(basePath: dirname(__DIR__))
-    ->withRouting(
-        web: __DIR__.'/../routes/web.php',
-        api: __DIR__.'/../routes/api.php',
-        commands: __DIR__.'/../routes/console.php',
-        health: '/up',
-    )
-    ->withMiddleware(function (Middleware $middleware) {
-        $middleware->alias([
-            'admin' => \App\Http\Middleware\EnsureIsAdmin::class,
-            'teacher' => \App\Http\Middleware\EnsureIsTeacher::class,
-            'student' => \App\Http\Middleware\EnsureIsStudent::class,
-        ]);
+Route::get('/', function () {
+    return view('dashboard');
+});
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/dashboard', fn() => view('admin.dashboard'))->name('admin.dashboard');
+});
 
-        $middleware->web([
-            // 
-        ]);
-    })
-    ->withExceptions(function (Exceptions $exceptions) {
-        //
-    })->create();
+Route::middleware(['auth', 'teacher'])->group(function () {
+    Route::get('/teacher/dashboard', fn() => view('teacher.dashboard'))->name('teacher.dashboard');
+});
+
+Route::middleware(['auth', 'student'])->group(function () {
+    Route::get('/student/dashboard', fn() => view('student.dashboard'))->name('student.dashboard');
+});
