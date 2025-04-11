@@ -23,3 +23,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
 });
+
+Route::middleware(['auth', 'teacher'])->group(function () {
+    Route::get('/teacher/dashboard', function () {
+        return view('teacher.dashboard');
+    })->name('teacher.dashboard');
+// addtional here
+});
