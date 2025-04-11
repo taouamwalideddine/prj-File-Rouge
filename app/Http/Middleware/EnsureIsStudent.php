@@ -9,7 +9,7 @@ class EnsureIsStudent
 {
     public function handle(Request $request, Closure $next)
     {
-        if (!$request->user() || !$request->user()->isStudent()) {
+        if (!$request->user() || $request->user()->role !== 'student') {
             return redirect('/');
         }
 

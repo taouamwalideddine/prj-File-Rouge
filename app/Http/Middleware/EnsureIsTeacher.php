@@ -9,7 +9,7 @@ class EnsureIsTeacher
 {
     public function handle(Request $request, Closure $next)
     {
-        if (!$request->user() || !$request->user()->isTeacher()) {
+        if (!$request->user() || $request->user()->role !== 'teacher') {
             return redirect('/');
         }
 
