@@ -38,3 +38,6 @@ Route::middleware(['auth', 'student'])->group(function () {
 
 // addtional here
 });
+Route::fallback(function () {
+    return redirect('/');
+});
