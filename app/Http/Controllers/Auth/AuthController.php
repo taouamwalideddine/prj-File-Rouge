@@ -59,4 +59,29 @@ class AuthController extends Controller
         return $this->redirectAuthenticatedUser();
     }
 
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/');
+    }
+
+    protected function redirectAuthenticatedUser()
+    {
+        $user = Auth::user();
+
+        switch ($user->role) {
+            case 'admin':
+                return redirect()->route('admin.dashboard');
+            case 'teacher':
+                return redirect()->route('teacher.dashboard');
+            case 'student':
+                return redirect()->route('student.dashboard');
+            default:
+                return redirect('/');
+        }
+    }
 }
