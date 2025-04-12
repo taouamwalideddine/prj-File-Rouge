@@ -8,14 +8,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Authentication Routes
 Route::controller(AuthController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'login');
     Route::post('/logout', 'logout')->name('logout');
 
-    Route::get('/register', 'showRegistrationForm')->name('register');
-    Route::post('/register', 'register');
+Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
 });
 
 // Protected Routes

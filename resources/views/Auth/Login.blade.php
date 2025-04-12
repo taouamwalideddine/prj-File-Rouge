@@ -155,100 +155,127 @@
                 </h1>
             </div>
 
-            <!-- Login Form -->
-            <div id="login-form" class="form-section @if($activeForm === 'login-form') active animate__animated animate__fadeIn @endif">
-                <h2 class="text-2xl font-semibold mb-4">Login to your Account</h2>
-                <p class="text-gray-500 mb-8">Please enter your credentials</p>
+<!-- Login Form -->
+<div id="login-form" class="form-section @if($activeForm === 'login-form') active animate__animated animate__fadeIn @endif">
+    <h2 class="text-2xl font-semibold mb-4">Login to your Account</h2>
+    <p class="text-gray-500 mb-8">Please enter your credentials</p>
 
-                <form method="POST" action="{{ route('login') }}" class="space-y-6">
-                    @csrf
-                    <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                        <input type="email" name="email" id="email" required
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
+    @if($errors->any())
+        <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            <ul>
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-                    <div>
-                        <div class="flex items-center justify-between mb-1">
-                            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                            <a href="#" onclick="showForm('reset-password-form')" class="text-sm text-blue-600 hover:underline">Forgot password?</a>
-                        </div>
-                        <input type="password" name="password" id="password" required
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
+    <form method="POST" action="{{ route('login') }}" class="space-y-6">
+        @csrf
+        <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input type="email" name="email" id="email" required
+                   value="{{ old('email') }}"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
 
-                    <div class="flex items-center">
-                        <input type="checkbox" name="remember" id="remember" class="h-4 w-4 text-blue-600 border-gray-300 rounded">
-                        <label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
-                    </div>
-
-                    <div>
-                        <button type="submit" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Login
-                        </button>
-                    </div>
-                </form>
-
-                <div class="mt-8 text-center">
-                    <p class="text-sm text-gray-600">
-                        Don't have an account?
-                        <a href="{{ route('register') }}" class="font-medium text-blue-600 hover:underline">Register</a>
-                    </p>
-                </div>
+        <div>
+            <div class="flex items-center justify-between mb-1">
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <a href="#" onclick="showForm('reset-password-form')" class="text-sm text-blue-600 hover:underline">Forgot password?</a>
             </div>
+            <input type="password" name="password" id="password" required
+                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
 
-            <!-- Register Form -->
-            <div id="register-form" class="form-section @if($activeForm === 'register-form') active animate__animated animate__fadeIn @endif">
-                <h2 class="text-2xl font-semibold mb-4">Create Account</h2>
-                <p class="text-gray-500 mb-8">Join as student or teacher</p>
+        <div class="flex items-center">
+            <input type="checkbox" name="remember" id="remember" class="h-4 w-4 text-blue-600 border-gray-300 rounded">
+            <label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
+        </div>
 
-                <form method="POST" action="{{ route('register') }}" class="space-y-6">
-                    @csrf
-                    <div>
-                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                        <input type="text" name="name" id="name" required
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
+        <div>
+            <button type="submit" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Login
+            </button>
+        </div>
+    </form>
 
-                    <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                        <input type="email" name="email" id="email" required
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
+    <div class="mt-8 text-center">
+        <p class="text-sm text-gray-600">
+            Don't have an account?
+            <a href="{{ route('register') }}" class="font-medium text-blue-600 hover:underline">Register</a>
+        </p>
+    </div>
+</div>
 
-                    <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                        <input type="password" name="password" id="password" required
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
+<div id="register-form" class="form-section @if($activeForm === 'register-form') active animate__animated animate__fadeIn @endif">
+    <h2 class="text-2xl font-semibold mb-4">Create Account</h2>
+    <p class="text-gray-500 mb-8">Join as student or teacher</p>
 
-                    <div>
-                        <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
-                        <input type="password" name="password_confirmation" id="password_confirmation" required
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
+    @if($errors->any())
+        <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            <ul>
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Account Type</label>
-                        <div class="flex space-x-4">
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="role" value="student" checked class="h-4 w-4 text-blue-600">
-                                <span class="ml-2">Student</span>
-                            </label>
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="role" value="teacher" class="h-4 w-4 text-blue-600">
-                                <span class="ml-2">Teacher</span>
-                            </label>
-                        </div>
-                    </div>
+    <form method="POST" action="{{ route('register') }}" class="space-y-6">
+        @csrf
 
-                    <div>
-                        <button type="submit" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Register
-                        </button>
-                    </div>
-                </form>
+        <div>
+            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+            <input type="text" name="name" id="name" required
+                   value="{{ old('name') }}"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
 
+        <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input type="email" name="email" id="email" required
+                   value="{{ old('email') }}"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <div>
+            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <input type="password" name="password" id="password" required
+                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <div>
+            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+            <input type="password" name="password_confirmation" id="password_confirmation" required
+                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Account Type</label>
+            <div class="flex space-x-4">
+                <label class="inline-flex items-center">
+                    <input type="radio" name="role" value="student" checked class="h-4 w-4 text-blue-600">
+                    <span class="ml-2">Student</span>
+                </label>
+                <label class="inline-flex items-center">
+                    <input type="radio" name="role" value="teacher" class="h-4 w-4 text-blue-600">
+                    <span class="ml-2">Teacher</span>
+                </label>
+            </div>
+        </div>
+
+        <div>
+            <button type="submit" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Register
+            </button>
+        </div>
+    </form>
+
+    <div class="mt-8 text-center">
+        <a href="#" onclick="showForm('login-form')" class="text-sm text-blue-600 hover:underline">Back to Login</a>
+    </div>
+</div>
                 <div class="mt-8 text-center">
                     <a href="{{ route('login') }}" class="text-sm text-blue-600 hover:underline">Back to Login</a>
                 </div>
