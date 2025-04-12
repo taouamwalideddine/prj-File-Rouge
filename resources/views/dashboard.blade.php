@@ -286,7 +286,7 @@
   </div>
 </div>
 
-<div id="confirmation-dialog" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div id="confirmation-dialog" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
   <div class="bg-white rounded-lg shadow-xl max-w-sm w-full mx-4 p-6">
     <div class="flex flex-col items-center text-center">
       <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-4">
@@ -303,9 +303,9 @@
       </div>
     </div>
   </div>
-</div>
+    </div>
 
-<div id="success-message" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div id="success-message" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
   <div class="bg-white rounded-lg shadow-xl max-w-sm w-full mx-4 p-6">
     <div class="flex flex-col items-center text-center">
       <div class="mb-4">
@@ -333,10 +333,10 @@
       </div>
     </div>
   </div>
-</div>
+    </div>
 
 <!-- Quiz result -->
-<div id="quiz-results" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50  overflow-y-auto">
+    <div id="quiz-results" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50  overflow-y-auto">
   <div class="bg-white rounded-lg shadow-xl max-w-3xl w-full mx-4 my-8">
     <div class="p-6">
       <div class="flex justify-between items-center mb-6">
@@ -420,7 +420,7 @@
       </div>
     </div>
   </div>
-</div>
+    </div>
 
 <!-- temporary js -->
 <script>
