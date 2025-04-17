@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -28,25 +29,21 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function quizzes()
-    {
-        return $this->hasMany(Quiz::class);
-    }
-
     public function classroom()
     {
-        if ($this->role === 'teacher') {
-            return $this->hasOne(Classroom::class, 'teacher_id');
-        }
-        return null;
+        return $this->hasOne(Classroom::class, 'teacher_id');
     }
 
     public function enrolledClassrooms()
     {
-        // For students - classrooms they've joined
         return $this->belongsToMany(Classroom::class, 'classroom_student')
-            ->withPivot('status')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->withPivot('status'); 
+    }
+
+    public function quizzes()
+    {
+        return $this->hasMany(Quiz::class);
     }
 
     public function quizResults()
@@ -54,14 +51,9 @@ class User extends Authenticatable
         return $this->hasMany(QuizResult::class, 'student_id');
     }
 
-    public function studentAnswers()
+    public function answers()
     {
         return $this->hasMany(StudentAnswer::class, 'student_id');
-    }
-
-    public function isAdmin()
-    {
-        return $this->role === 'admin';
     }
 
     public function isTeacher()
@@ -69,13 +61,13 @@ class User extends Authenticatable
         return $this->role === 'teacher';
     }
 
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
     public function isStudent()
     {
         return $this->role === 'student';
-    }
-
-    public function notifications()
-    {
-        return $this->hasMany(Notification::class);
     }
 }
