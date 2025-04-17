@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,26 +12,41 @@ class User extends Authenticatable
     use HasFactory, Notifiable, SoftDeletes;
 
     protected $fillable = [
-        'name', 'email', 'password', 'role'
+        'name',
+        'email',
+        'password',
+        'role',
     ];
 
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
-    public function classrooms()
-    {
-        return $this->belongsToMany(Classroom::class)->withTimestamps();
-    }
-
-    public function teacherClassrooms()
-    {
-        return $this->hasMany(Classroom::class, 'teacher_id');
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
 
     public function quizzes()
     {
         return $this->hasMany(Quiz::class);
+    }
+
+    public function classroom()
+    {
+        if ($this->role === 'teacher') {
+            return $this->hasOne(Classroom::class, 'teacher_id');
+        }
+        return null;
+    }
+
+    public function enrolledClassrooms()
+    {
+        // For students - classrooms they've joined
+        return $this->belongsToMany(Classroom::class, 'classroom_student')
+            ->withPivot('status')
+            ->withTimestamps();
     }
 
     public function quizResults()
@@ -40,12 +56,7 @@ class User extends Authenticatable
 
     public function studentAnswers()
     {
-        return $this->hasMany(studentAnswer::class, 'student_id');
-    }
-
-    public function isTeacher()
-    {
-        return $this->role === 'teacher';
+        return $this->hasMany(StudentAnswer::class, 'student_id');
     }
 
     public function isAdmin()
@@ -53,8 +64,18 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
+    public function isTeacher()
+    {
+        return $this->role === 'teacher';
+    }
+
     public function isStudent()
     {
         return $this->role === 'student';
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
     }
 }

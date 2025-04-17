@@ -37,11 +37,4 @@ class Quiz extends Model
     {
         return $this->hasMany(QuizResult::class);
     }
-
-    public function isAvailable()
-    {
-        $now = now();
-        return ($this->available_at === null || $now->gte($this->available_at)) &&
-               ($this->expires_at === null || $now->lte($this->expires_at));
-    }
 }
