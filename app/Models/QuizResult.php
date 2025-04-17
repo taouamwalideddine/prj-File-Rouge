@@ -10,13 +10,17 @@ class QuizResult extends Model
     use HasFactory;
 
     protected $fillable = [
-        'quiz_id', 'student_id', 'score', 'total_questions',
-        'answer_details', 'completed_at'
+        'quiz_id',
+        'student_id',
+        'score',
+        'total_questions',
+        'answer_details',
+        'completed_at',
     ];
 
     protected $casts = [
-        'answer_details' => 'json',
-        'completed_at' => 'datetime'
+        'answer_details' => 'array',
+        'completed_at' => 'datetime',
     ];
 
     public function quiz()
