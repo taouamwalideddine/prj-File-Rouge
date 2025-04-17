@@ -207,7 +207,7 @@
         </p>
     </div>
 </div>
-
+<!-- register form -->
 <div id="register-form" class="form-section @if($activeForm === 'register-form') active animate__animated animate__fadeIn @endif">
     <h2 class="text-2xl font-semibold mb-4">Create Account</h2>
     <p class="text-gray-500 mb-8">Join as student or teacher</p>
