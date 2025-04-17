@@ -10,7 +10,9 @@ class Classroom extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'teacher_id', 'code'
+        'name',
+        'teacher_id',
+        'description',
     ];
 
     public function teacher()
@@ -20,11 +22,27 @@ class Classroom extends Model
 
     public function students()
     {
-        return $this->belongsToMany(User::class)->withTimestamps();
+        return $this->belongsToMany(User::class, 'classroom_student')
+            ->withTimestamps()
+            ->withPivot('status');
     }
 
     public function quizzes()
     {
-        return $this->hasMany(quiz::class);
+        return $this->hasMany(Quiz::class);
+    }
+
+    public function pendingRequests()
+    {
+        return $this->belongsToMany(User::class, 'classroom_student')
+            ->withTimestamps()
+            ->wherePivot('status', 'pending');
+    }
+
+    public function acceptedStudents()
+    {
+        return $this->belongsToMany(User::class, 'classroom_student')
+            ->withTimestamps()
+            ->wherePivot('status', 'accepted');
     }
 }
