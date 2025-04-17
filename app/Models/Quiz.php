@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,8 +10,13 @@ class Quiz extends Model
     use HasFactory;
 
     protected $fillable = [
-        'classroom_id', 'user_id', 'title', 'description', 'type',
-        'available_at', 'expires_at'
+        'classroom_id',
+        'user_id',
+        'title',
+        'description',
+        'type',
+        'available_at',
+        'expires_at',
     ];
 
     protected $casts = [
@@ -23,7 +29,7 @@ class Quiz extends Model
         return $this->belongsTo(Classroom::class);
     }
 
-    public function teacher()
+    public function author()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
