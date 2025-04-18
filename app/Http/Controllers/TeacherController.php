@@ -7,35 +7,35 @@ use App\Models\Quiz;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 class TeacherController extends Controller
 {
-    use AuthorizesRequests;
-
     public function dashboard()
     {
         $teacher = Auth::user();
         $classroom = $teacher->classroom;
 
-        $data = [
-            'classroom' => $classroom,
-            'pendingRequests' => $classroom?->pendingRequests()->count() ?? 0,
-            'recentQuizzes' => $classroom?->quizzes()->latest()->take(3)->get() ?? collect(),
-            'studentCount' => $classroom?->acceptedStudents()->count() ?? 0
-        ];
+        if (!$classroom) {
+            $classroom = Classroom::create([
+                'name' => $teacher->name . "'s Class",
+                'teacher_id' => $teacher->id
+            ]);
+        }
 
-        return view('teacher.dashboard', $data);
+        return view('teacher.dashboard', [
+            'classroom' => $classroom,
+            'pendingRequests' => $classroom->pendingRequests()->count(),
+            'studentCount' => $classroom->acceptedStudents()->count(),
+            'quizzes' => $classroom->quizzes()->latest()->get(),
+            'recentQuizzes' => $classroom->quizzes()->latest()->take(3)->get()
+        ]);
     }
 
     public function manageClassroom()
     {
         $classroom = Auth::user()->classroom;
 
-        if (!$classroom) {
-            return redirect()->route('teacher.dashboard')->with('error', 'You need to create a classroom first');
-        }
-
-        return view('teacher.', [
+        return view('teacher.classroom.manage', [
             'classroom' => $classroom,
             'students' => $classroom->acceptedStudents()->paginate(10)
         ]);
@@ -43,7 +43,7 @@ class TeacherController extends Controller
 
     public function joinRequests()
     {
-        $requests = Auth::user()->classroom?->pendingRequests()->paginate(10);
+        $requests = Auth::user()->classroom->pendingRequests()->paginate(10);
 
         return view('teacher.classroom.requests', [
             'requests' => $requests
@@ -58,74 +58,22 @@ class TeacherController extends Controller
             'status' => 'accepted'
         ]);
 
-        return back()->with('success', 'Student request accepted');
+        return back()->with('success', 'Student added to class');
     }
 
     public function rejectRequest(User $student)
     {
         Auth::user()->classroom->students()->detach($student->id);
 
-        return back()->with('success', 'Student request rejected');
+        return back()->with('success', 'Request rejected');
     }
 
     public function quizzes()
     {
-        $quizzes = Auth::user()->classroom?->quizzes()->latest()->paginate(10);
+        $quizzes = Auth::user()->classroom->quizzes()->latest()->paginate(10);
 
         return view('teacher.quizzes.index', [
             'quizzes' => $quizzes
-        ]);
-    }
-
-    public function createQuiz()
-    {
-        return view('teacher.quizzes.create', [
-            'classroom' => Auth::user()->classroom
-        ]);
-    }
-
-    public function storeQuiz(Request $request)
-    {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'type' => 'required|in:mcq,true_false',
-            'available_at' => 'required|date',
-            'expires_at' => 'required|date|after:available_at',
-            'classroom_id' => 'required|exists:classrooms,id'
-        ]);
-
-        $quiz = Quiz::create([
-            ...$validated,
-            'user_id' => Auth::id()
-        ]);
-
-        // TODO: add notification to students
-
-        return redirect()->route('teacher.quizzes')->with('success', 'Quiz created successfully');
-    }
-
-    public function deleteQuiz(Quiz $quiz)
-    {
-        $this->authorize('delete', $quiz);
-
-        $quiz->delete();
-
-        return back()->with('success', 'Quiz deleted successfully');
-    }
-
-    public function quizResults(Quiz $quiz)
-    {
-        $this->authorize('viewResults', $quiz);
-
-        return view('teacher.quizzes.results', [
-            'quiz' => $quiz->load('results.student'),
-            'averageScore' => $quiz->results()->avg('score'),
-            'topStudents' => $quiz->results()
-                ->with('student')
-                ->orderByDesc('score')
-                ->take(5)
-                ->get()
         ]);
     }
 }
