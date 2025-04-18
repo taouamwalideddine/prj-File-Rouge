@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class TeacherController extends Controller
 {
-    use AuthorizesRequests; 
+    use AuthorizesRequests;
 
     public function dashboard()
     {
@@ -35,7 +35,7 @@ class TeacherController extends Controller
             return redirect()->route('teacher.dashboard')->with('error', 'You need to create a classroom first');
         }
 
-        return view('teacher.classroom.manage', [
+        return view('teacher.', [
             'classroom' => $classroom,
             'students' => $classroom->acceptedStudents()->paginate(10)
         ]);

@@ -3,343 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quizhub - Login & Register</title>
+    <title>QuizHub - Manage Classroom</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <style>
         .gradient-bg {
-            background: linear-gradient(135deg, #3b5998 0%, #192f6a 100%);
-            position: relative;
-            overflow: hidden;
+            background: linear-gradient(135deg, #4361ee, #3730a3);
         }
-
-        .gradient-bg::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 150%;
-            height: 150%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0) 70%);
-            transform: translate(-25%, -25%);
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
         }
-
-        .quote-text {
-            max-width: 300px;
-            color: rgba(255, 255, 255, 0.9);
-            line-height: 1.6;
-            position: relative;
-            z-index: 2;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        .card-overlay {
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-
-        .logo-dot {
-            color: #1e40af;
+        .quiz-card:hover .card-overlay {
+            opacity: 1;
         }
-
-        .form-section {
-            display: none;
-            animation-duration: 0.5s;
+        .pulse {
+            animation: pulse 2s infinite;
         }
-
-        .form-section.active {
-            display: block;
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
-
-        .btn-primary {
-            background: linear-gradient(to right, #3b5998, #4a66ad);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+        .notification-badge {
+            animation: bounce 1s infinite;
         }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(59, 89, 152, 0.4);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        .btn-primary::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to right, rgba(255,255,255,0.2), rgba(255,255,255,0));
-            transform: translateX(-100%);
-            transition: transform 0.6s ease;
-            pointer-events: none;
-        }
-
-        .btn-primary:hover::after {
-            transform: translateX(100%);
-        }
-
-        input {
-            transition: all 0.3s ease;
-        }
-
-        input:focus {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(59, 89, 152, 0.2);
-        }
-
-        .link-hover {
-            position: relative;
-            display: inline-block;
-        }
-
-        .link-hover::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 2px;
-            background: #3b5998;
-            left: 0;
-            bottom: -2px;
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.3s ease;
-        }
-
-        .link-hover:hover::after {
-            transform: scaleX(1);
-        }
-
-        .form-container {
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(-20px); }
-            50% { transform: translateY(10px); }
-            100% { transform: translateY(-20px); }
-        }
-
-        .floating {
-            animation: float 7s ease-in-out infinite;
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
     </style>
 </head>
-<body class="h-screen flex">
-    <div class="hidden md:flex md:w-1/2 gradient-bg flex-col justify-between p-10">
-        <div>
-            <h2 class="text-white text-3xl mb-2 floating">Quizhub</h2>
+<body class="bg-gray-50 font-sans">
+    <nav class="gradient-bg text-white p-4 sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <h1 class="text-2xl font-bold">QuizHub</h1>
+            </div>
+            <div class="flex items-center space-x-6">
+                <div class="flex items-center space-x-2">
+                    <span class="font-medium">{{ Auth::user()->name }}</span>
+                    <div class="w-8 h-8 rounded-full bg-indigo-300 flex items-center justify-center shadow-md">
+                        <span class="text-sm font-bold text-white">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="flex">
+        <div class="w-64 bg-white shadow-lg min-h-screen pt-4 border-r border-gray-200">
+            <div class="px-4 py-2">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="{{ route('teacher.dashboard') }}" class="block px-4 py-3 rounded-md text-gray-700 hover:bg-indigo-100 hover:text-indigo-700 transition-all flex items-center space-x-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                            </svg>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('teacher.classroom.manage') }}" class="block px-4 py-3 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition-all flex items-center space-x-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            <span>My Classes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('teacher.quizzes.create') }}" class="block px-4 py-3 rounded-md text-gray-700 hover:bg-indigo-100 hover:text-indigo-700 transition-all flex items-center space-x-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                            <span>Create Quiz</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('teacher.quizzes') }}" class="block px-4 py-3 rounded-md text-gray-700 hover:bg-indigo-100 hover:text-indigo-700 transition-all flex items-center space-x-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                            <span>Quiz Analytics</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('teacher.requests') }}" class="block px-4 py-3 rounded-md text-gray-700 hover:bg-indigo-100 hover:text-indigo-700 transition-all flex items-center space-x-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            <span>Student Requests</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="block px-4 py-3 rounded-md text-gray-700 hover:bg-indigo-100 hover:text-indigo-700 transition-all flex items-center space-x-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                            </svg>
+                            <span>Notifications</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
 
-        <div class="quote-text mb-20">
-            <p class="text-sm">
-                "L'éducation n'est pas une préparation à la vie, c'est la vie même. Le processus d'apprentissage est continu et la salle de classe s'étend bien au-delà des quatre murs."
-            </p>
-            <p class="text-sm mt-3">- John Dewey</p>
-        </div>
-
-        <div class="text-white text-xs opacity-70">
-            &copy; 2025 Quizhub
-        </div>
-    </div>
-
-    <!-- Right Panel - Forms -->
-    <div class="w-full md:w-1/2 flex items-center justify-center bg-gray-50 p-5">
-        <div class="w-full max-w-md form-container bg-white p-8">
-            <div class="text-center mb-8">
-                <h1 class="text-xl font-semibold flex items-center justify-center">
-                    <span>Quizhub</span><span class="logo-dot font-bold">.</span>
-                </h1>
+        <div class="flex-1 p-8">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-800">Manage Classroom</h2>
             </div>
 
-            <!-- Login Form -->
-            <div id="login-form" class="form-section active animate__animated animate__fadeIn">
-                <h2 class="text-2xl font-semibold mb-4">Login to your Account</h2>
-                <p class="text-gray-500 mb-8">Please enter your credentials to access your account</p>
-
-                <form action="#" class="space-y-6">
-                    <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                        <input type="email" name="email" id="email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-
-                    <div>
-                        <div class="flex items-center justify-between mb-1">
-                            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                            <a href="#" onclick="showForm('reset-password-form')" class="text-sm text-blue-600 hover:underline link-hover">Forgot password?</a>
-                        </div>
-                        <input type="password" name="password" id="password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-
-                    <div class="flex items-center">
-                        <input type="checkbox" name="remember" id="remember" class="h-4 w-4 text-blue-600 border-gray-300 rounded">
-                        <label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
-                    </div>
-
-                    <div>
-                        <button type="submit" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-white btn-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Login
-                        </button>
-                    </div>
-                </form>
-
-                <div class="mt-8 text-center">
-                    <p class="text-sm text-gray-600">
-                        Don't have an account?
-                        <a href="#" onclick="showForm('register-form')" class="font-medium text-blue-600 hover:underline link-hover">Register Account</a>
-                    </p>
+            @if (session('error'))
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6" role="alert">
+                    <p>{{ session('error') }}</p>
                 </div>
-            </div>
+            @endif
 
-            <!-- Register Form -->
-            <div id="register-form" class="form-section animate__animated animate__fadeIn">
-                <h2 class="text-2xl font-semibold mb-4">Create an Account</h2>
-                <p class="text-gray-500 mb-8">Join Quizhub and start your learning journey</p>
-
-                <form action="#" class="space-y-5">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label for="first-name" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-                            <input type="text" name="first-name" id="first-name" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        </div>
-                        <div>
-                            <label for="last-name" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-                            <input type="text" name="last-name" id="last-name" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        </div>
+            @if ($classroom)
+                <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">{{ $classroom->name }}</h3>
+                    <div class="text-gray-600 mb-4">Total Students: {{ $students->total() }}</div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full">
+                            <thead>
+                                <tr class="bg-indigo-50">
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">Student Name</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">Email</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">Joined At</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-indigo-100">
+                                @foreach ($students as $student)
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{{ $student->name }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $student->email }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $student->pivot->created_at->format('M d, Y') }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                            <form action="{{ route('teacher.reject', $student->id) }}" method="POST" class="inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white rounded p-1" onclick="return confirm('Are you sure you want to remove this student?')">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
-
-                    <div>
-                        <label for="register-email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                        <input type="email" name="register-email" id="register-email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <div class="mt-4">
+                        {{ $students->links() }}
                     </div>
-
-                    <div>
-                        <label for="user-type" class="block text-sm font-medium text-gray-700 mb-1">I am a</label>
-                        <select id="user-type" name="user-type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="student">Student</option>
-                            <option value="teacher">Teacher</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label for="register-password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                        <input type="password" name="register-password" id="register-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-
-                    <div>
-                        <label for="confirm-password" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
-                        <input type="password" name="confirm-password" id="confirm-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-
-                    <div class="flex items-center">
-                        <input type="checkbox" name="terms" id="terms" required class="h-4 w-4 text-blue-600 border-gray-300 rounded">
-                        <label for="terms" class="ml-2 block text-sm text-gray-700">I agree to the <a href="#" class="text-blue-600 hover:underline link-hover">Terms and Conditions</a></label>
-                    </div>
-
-                    <div>
-                        <button type="submit" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-white btn-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Create Account
-                        </button>
-                    </div>
-                </form>
-
-                <div class="mt-8 text-center">
-                    <p class="text-sm text-gray-600">
-                        Already have an account?
-                        <a href="#" onclick="showForm('login-form')" class="font-medium text-blue-600 hover:underline link-hover">Login</a>
-                    </p>
                 </div>
-            </div>
+            @endif
 
-            <!-- Reset Password Form -->
-            <div id="reset-password-form" class="form-section animate__animated animate__fadeIn">
-                <h2 class="text-2xl font-semibold mb-4">Reset Password</h2>
-                <p class="text-gray-500 mb-8">Please enter your email to receive a password reset link</p>
-
-                <form action="#" class="space-y-6">
-                    <div>
-                        <label for="reset-email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                        <input type="email" name="reset-email" id="reset-email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-
-                    <div>
-                        <button type="button" onclick="showForm('change-password-form')" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-white btn-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Send Reset Link
-                        </button>
-                    </div>
-                </form>
-
-                <div class="mt-8 text-center">
-                    <a href="#" onclick="showForm('login-form')" class="text-sm text-blue-600 hover:underline link-hover">Back to Login</a>
+            <footer class="mt-12 py-6 border-t border-indigo-100">
+                <div class="text-center text-gray-600 text-sm">
+                    <p>© 2025 QuizHub. All rights reserved.</p>
                 </div>
-            </div>
-
-            <div id="change-password-form" class="form-section animate__animated animate__fadeIn">
-                <h2 class="text-2xl font-semibold mb-4">Change Password</h2>
-                <p class="text-gray-500 mb-8">Please enter your new password</p>
-
-                <form action="#" class="space-y-6">
-                    <div>
-                        <label for="new-password" class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
-                        <input type="password" name="new-password" id="new-password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-
-                    <div>
-                    <label for="confirm-new-password" class="text-sm font-medium text-gray-700">Confirm New Password</label>
-                    </div>
-
-                    <div>
-                        <button type="button" onclick="showForm('login-form')" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Change Password
-                        </button>
-                    </div>
-                </form>
-
-                <div class="mt-8 text-center">
-                    <a href="#" onclick="showForm('login-form')" class="text-sm text-blue-600 hover:underline">Back to Login</a>
-                </div>
-            </div>
+            </footer>
         </div>
     </div>
-
-    <script>
-        function showForm(formId) {
-            document.querySelectorAll('.form-section').forEach(form => {
-                form.classList.remove('active');
-            });
-
-            document.getElementById(formId).classList.add('active');
-        }
-
-        function selectRole(element, role) {
-
-            document.querySelectorAll('.role-option').forEach(option => {
-                option.classList.remove('selected');
-            });
-
-            element.classList.add('selected');
-
-            document.getElementById('role').value = role;
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const inputs = document.querySelectorAll('input');
-            inputs.forEach(input => {
-                input.addEventListener('focus', function() {
-                    this.parentElement.classList.add('focused');
-                });
-
-                input.addEventListener('blur', function() {
-                    this.parentElement.classList.remove('focused');
-                });
-            });
-
-            setTimeout(() => {
-                document.querySelector('.form-section.active').style.opacity = "1";
-            }, 100);
-        });
-    </script>
 </body>
-</html>
+</html>ll

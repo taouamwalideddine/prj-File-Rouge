@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes
@@ -24,10 +25,20 @@ Route::middleware(['auth', 'admin'])->group(function () {
     })->name('admin.dashboard');
 });
 
-Route::middleware(['auth', 'teacher'])->group(function () {
-    Route::get('/teacher/dashboard', function () {
-        return view('teacher.dashboard');
-    })->name('teacher.dashboard');
+Route::prefix('teacher')->middleware(['auth', 'teacher'])->group(function () {
+    Route::get('/dashboard', [TeacherController::class, 'dashboard'])->name('teacher.dashboard');
+    Route::get('/classroom', [TeacherController::class, 'manageClassroom'])->name('teacher.classroom');
+    Route::get('/classroom/requests', [TeacherController::class, 'joinRequests'])->name('teacher.requests');
+    Route::post('/classroom/accept/{student}', [TeacherController::class, 'acceptRequest'])->name('teacher.accept');
+    Route::post('/classroom/reject/{student}', [TeacherController::class, 'rejectRequest'])->name('teacher.reject');
+
+    Route::prefix('quizzes')->group(function () {
+        Route::get('/', [TeacherController::class, 'quizzes'])->name('teacher.quizzes');
+        Route::get('/create', [TeacherController::class, 'createQuiz'])->name('teacher.quizzes.create');
+        Route::post('/', [TeacherController::class, 'storeQuiz'])->name('teacher.quizzes.store');
+        Route::delete('/{quiz}', [TeacherController::class, 'deleteQuiz'])->name('teacher.quizzes.delete');
+        Route::get('/{quiz}/results', [TeacherController::class, 'quizResults'])->name('teacher.quizzes.results');
+    });
 });
 
 Route::middleware(['auth', 'student'])->group(function () {
