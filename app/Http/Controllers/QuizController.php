@@ -82,11 +82,11 @@ public function show(Quiz $quiz)
         } else {
             $question->answers()->createMany([
                 [
-                    'content' => 'True',  // Explicit content
+                    'content' => 'True', 
                     'is_correct' => $request->correct_answer == 0
                 ],
                 [
-                    'content' => 'False',  // Explicit content
+                    'content' => 'False',
                     'is_correct' => $request->correct_answer == 1
                 ]
             ]);

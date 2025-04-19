@@ -337,8 +337,8 @@
 
 <!-- Quiz result -->
     <div id="quiz-results" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50  overflow-y-auto">
-  <div class="bg-white rounded-lg shadow-xl max-w-3xl w-full mx-4 my-8">
-    <div class="p-6">
+     <div class="bg-white rounded-lg shadow-xl max-w-3xl w-full mx-4 my-8">
+     <div class="p-6">
       <div class="flex justify-between items-center mb-6">
         <h2 class="text-2xl font-bold text-#021024">Quiz Results: Algebra Basics</h2>
         <button id="close-results" class="text-gray-400 hover:text-gray-600">
@@ -356,7 +356,7 @@
         <div class="w-24 h-24 rounded-full bg-#052659 flex items-center justify-center">
           <span class="text-3xl font-bold text-white">80%</span>
         </div>
-      </div>
+    </div>
 
       <!-- Question List with Corrections -->
       <div class="space-y-6 mb-6">
@@ -421,98 +421,5 @@
     </div>
   </div>
     </div>
-
-<!-- temporary js -->
-<script>
-//   DOM practice
-const quizQuestion = document.getElementById('quiz-question');
-const closeQuestion = document.getElementById('close-question');
-const submitQuestion = document.getElementById('submit-question');
-const confirmationDialog = document.getElementById('confirmation-dialog');
-const cancelSubmit = document.getElementById('cancel-submit');
-const confirmSubmit = document.getElementById('confirm-submit');
-const successMessage = document.getElementById('success-message');
-const reviewQuiz = document.getElementById('review-quiz');
-const goHome = document.getElementById('go-home');
-
-// added dom
-const quizResults = document.getElementById('quiz-results');
-const closeResults = document.getElementById('close-results');
-const backToDashboard = document.getElementById('back-to-dashboard');
-
-// function to show/hide existing popups
-function showQuizQuestion() {
-  quizQuestion.classList.remove('hidden');
-}
-
-function hideQuizQuestion() {
-  quizQuestion.classList.add('hidden');
-}
-
-function showConfirmation() {
-  confirmationDialog.classList.remove('hidden');
-}
-
-function hideConfirmation() {
-  confirmationDialog.classList.add('hidden');
-}
-
-function showSuccess() {
-  successMessage.classList.remove('hidden');
-}
-
-function hideSuccess() {
-  successMessage.classList.add('hidden');
-}
-
-
-function showQuizResults() {
-  quizResults.classList.remove('hidden');
-}
-
-function hideQuizResults() {
-  quizResults.classList.add('hidden');
-}
-
-
-// event listeners
-closeQuestion.addEventListener('click', hideQuizQuestion);
-
-submitQuestion.addEventListener('click', () => {
-  hideQuizQuestion();
-  showConfirmation();
-});
-
-cancelSubmit.addEventListener('click', () => {
-  hideConfirmation();
-  showQuizQuestion();
-});
-
-confirmSubmit.addEventListener('click', () => {
-  hideConfirmation();
-  showSuccess();
-});
-
-reviewQuiz.addEventListener('click', () => {
-  hideSuccess();
-  showQuizResults(); d
-});
-
-goHome.addEventListener('click', () => {
-  hideSuccess();
-});
-
-// Event listeners for new popups
-closeResults.addEventListener('click', hideQuizResults);
-
-backToDashboard.addEventListener('click', () => {
-  hideQuizResults();
-});
-
-
-
-closeStandings.addEventListener('click', hideClassStandings);
-closeStandingsBtn.addEventListener('click', hideClassStandings);
-</script>
 </body>
 </html>
