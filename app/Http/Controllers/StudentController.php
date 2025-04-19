@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Classroom;
 use App\Models\Quiz;
 use App\Models\QuizResult;
+use App\Models\StudentAnswer;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -56,7 +57,6 @@ class StudentController extends Controller
 
 public function startQuiz(Quiz $quiz)
 {
-    // Check attempts
     if ($quiz->results()->where('student_id', auth()->id())->exists()) {
         return back()->with('error', 'You already completed this quiz');
     }
@@ -67,10 +67,50 @@ public function startQuiz(Quiz $quiz)
     ]);
 }
 
-    public function submitQuiz(Request $request, Quiz $quiz)
-    {
-        // calculer les resulta
+public function submitQuiz(Request $request, Quiz $quiz)
+{
+    $student = auth()->user();
+
+    if ($quiz->results()->where('student_id', $student->id)->exists()) {
+        abort(403, 'Already completed this quiz');
     }
+
+    $score = 0;
+    $answers = [];
+
+    foreach ($quiz->questions as $question) {
+        $answerId = $request->input('answers.'.$question->id);
+        $isCorrect = $question->answers->contains('id', $answerId) &&
+                     $question->answers->firstWhere('id', $answerId)->is_correct;
+
+        if ($isCorrect) {
+            $score += $question->points;
+        }
+
+        StudentAnswer::create([
+            'student_id' => $student->id,
+            'question_id' => $question->id,
+            'answer_id' => $answerId,
+            'is_correct' => $isCorrect
+        ]);
+
+        $answers[$question->id] = [
+            'answer_id' => $answerId,
+            'is_correct' => $isCorrect
+        ];
+    }
+
+    $result = QuizResult::create([
+        'quiz_id' => $quiz->id,
+        'student_id' => $student->id,
+        'score' => $score,
+        'total_questions' => $quiz->questions->count(),
+        'answer_details' => $answers,
+        'completed_at' => now()
+    ]);
+
+    return redirect()->route('student.quiz.results', $result);
+}
 
     public function quizResults(QuizResult $result)
     {
