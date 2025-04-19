@@ -17,8 +17,31 @@ class StudentController extends Controller
 
     public function classrooms()
     {
+        return view('student.classrooms.index', [
+            'joinedClassrooms' => auth()->user()->enrolledClassrooms()
+                                   ->wherePivot('status', 'accepted')
+                                   ->with('teacher')
+                                   ->get(),
+            'availableClassrooms' => Classroom::whereDoesntHave('students', function($q) {
+                $q->where('user_id', auth()->id());
+            })->get()
+        ]);
     }
 
+    public function showClassroom(Classroom $classroom)
+    {
+        if (!$classroom->students()->where('user_id', auth()->id())->where('status', 'accepted')->exists()) {
+            abort(403);
+        }
+
+        return view('student.classrooms.show', [
+            'classroom' => $classroom,
+            'quizzes' => $classroom->quizzes()
+                            ->available()
+                            ->withCount('questions')
+                            ->paginate(10)
+        ]);
+    }
 
     public function joinClassroom(Request $request, Classroom $classroom)
     {

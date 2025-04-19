@@ -43,4 +43,17 @@ class Quiz extends Model
     {
         return $this->hasMany(QuizResult::class);
     }
+
+    public function scopeAvailable($query)
+{
+    return $query->where(function($q) {
+        $q->whereNull('expires_at')
+          ->orWhere('expires_at', '>', now());
+    });
+}
+
+public function isActive()
+{
+    return !$this->expires_at || $this->expires_at > now();
+}
 }
