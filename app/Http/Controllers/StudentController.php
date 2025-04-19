@@ -54,9 +54,18 @@ class StudentController extends Controller
         // get all accessible quizes
     }
 
-    public function startQuiz(Quiz $quiz)
-    {
+public function startQuiz(Quiz $quiz)
+{
+    // Check attempts
+    if ($quiz->results()->where('student_id', auth()->id())->exists()) {
+        return back()->with('error', 'You already completed this quiz');
     }
+
+    return view('student.quizzes.take', [
+        'quiz' => $quiz->load(['questions.answers']),
+        'expires_at' => $quiz->expires_at
+    ]);
+}
 
     public function submitQuiz(Request $request, Quiz $quiz)
     {
