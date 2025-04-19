@@ -7,42 +7,40 @@ use App\Models\Quiz;
 use App\Models\QuizResult;
 use App\Models\StudentAnswer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests; 
 
 class StudentController extends Controller
 {
+    use AuthorizesRequests;
 
     public function dashboard()
     {
     }
 
 
-    public function classrooms()
-    {
-        return view('student.classrooms.index', [
-            'joinedClassrooms' => auth()->user()->enrolledClassrooms()
-                                   ->wherePivot('status', 'accepted')
-                                   ->with('teacher')
-                                   ->get(),
-            'availableClassrooms' => Classroom::whereDoesntHave('students', function($q) {
-                $q->where('user_id', auth()->id());
-            })->get()
-        ]);
-    }
+public function classrooms()
+{
+    return view('student.classrooms.index', [
+        'joinedClassrooms' => Auth::user()->joinedClassrooms()->with('teacher')->get(),
+        'availableClassrooms' => Classroom::whereDoesntHave('students', function($query) {
+            $query->where('user_id', Auth::id());
+        })->get()
+    ]);
+}
 
-    public function showClassroom(Classroom $classroom)
-    {
-        if (!$classroom->students()->where('user_id', auth()->id())->where('status', 'accepted')->exists()) {
-            abort(403);
-        }
+public function showClassroom(Classroom $classroom)
+{
+    $this->authorize('view', $classroom);
 
-        return view('student.classrooms.show', [
-            'classroom' => $classroom,
-            'quizzes' => $classroom->quizzes()
-                            ->available()
-                            ->withCount('questions')
-                            ->paginate(10)
-        ]);
-    }
+    return view('student.classrooms.show', [
+        'classroom' => $classroom,
+        'quizzes' => $classroom->quizzes()
+            ->available()
+            ->withCount('questions')
+            ->get()
+    ]);
+}
 
     public function joinClassroom(Request $request, Classroom $classroom)
     {
