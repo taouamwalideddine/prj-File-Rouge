@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->string('title');
             $table->text('description')->nullable();
+            $table->timestamp('expires_at')->nullable()->after('type');
             $table->enum('type', ['mcq', 'tf']);
             $table->timestamps();
         });
