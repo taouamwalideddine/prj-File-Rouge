@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Route;
 
@@ -51,10 +52,18 @@ Route::prefix('quizzes')->group(function () {
 });
 });
 
-Route::middleware(['auth', 'student'])->group(function () {
-    Route::get('/student/dashboard', function () {
-        return view('student.dashboard');
-    })->name('student.dashboard');
+
+Route::middleware(['auth', 'student'])->prefix('student')->group(function () {
+    Route::get('/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
+
+    Route::get('/classrooms', [StudentController::class, 'classrooms'])->name('student.classrooms');
+    Route::get('/classrooms/{classroom}', [StudentController::class, 'showClassroom'])->name('student.classrooms.show');
+    Route::post('/classrooms/{classroom}/join', [StudentController::class, 'joinClassroom'])->name('student.classrooms.join');
+
+    Route::get('/quizzes', [StudentController::class, 'quizzes'])->name('student.quizzes');
+    Route::get('/quizzes/{quiz}', [StudentController::class, 'startQuiz'])->name('student.quizzes.take');
+    Route::post('/quizzes/{quiz}', [StudentController::class, 'submitQuiz'])->name('student.quizzes.submit');
+    Route::get('/results/{result}', [StudentController::class, 'quizResults'])->name('student.quiz.results');
 });
 
 // Fallback Route
