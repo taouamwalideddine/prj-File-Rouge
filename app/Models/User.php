@@ -38,7 +38,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Classroom::class, 'classroom_student')
             ->withTimestamps()
-            ->withPivot('status'); 
+            ->withPivot('status');
     }
 
     public function quizzes()
@@ -56,6 +56,13 @@ class User extends Authenticatable
         return $this->hasMany(StudentAnswer::class, 'student_id');
     }
 
+    public function pendingClassrooms()
+{
+    return $this->belongsToMany(Classroom::class, 'classroom_student')
+        ->wherePivot('status', 'pending')
+        ->withTimestamps();
+}
+
     public function isTeacher()
     {
         return $this->role === 'teacher';
@@ -69,5 +76,27 @@ class User extends Authenticatable
     public function isStudent()
     {
         return $this->role === 'student';
+    }
+
+    public function joinedClassrooms()
+    {
+        return $this->belongsToMany(Classroom::class, 'classroom_student')
+            ->wherePivot('status', 'accepted')
+            ->withTimestamps();
+    }
+
+    public function classroomRequests()
+    {
+        return $this->belongsToMany(Classroom::class)
+            ->withPivot('status')
+            ->withTimestamps();
+    }
+
+    public function availableQuizzes()
+    {
+        return Quiz::whereHas('classroom.students', function($query) {
+            $query->where('user_id', $this->id)
+                  ->where('status', 'accepted');
+        })->available();
     }
 }

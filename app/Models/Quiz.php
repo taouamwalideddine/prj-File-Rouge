@@ -20,8 +20,7 @@ class Quiz extends Model
     ];
 
     protected $casts = [
-        'available_at' => 'datetime',
-        'expires_at' => 'datetime',
+        'expires_at' => 'datetime'
     ];
 
     public function classroom()
@@ -52,8 +51,21 @@ class Quiz extends Model
     });
 }
 
-public function isActive()
+    public function isActive()
 {
-    return !$this->expires_at || $this->expires_at > now();
+        return !$this->expires_at || $this->expires_at > now();
 }
+    public function isAccessibleBy(User $user)
+{
+        return $this->classroom->students()
+            ->where('user_id', $user->id)
+            ->where('status', 'accepted')
+            ->exists();
+}
+
+    public function totalPoints()
+{
+        return $this->questions->sum('points');
+}
+
 }
