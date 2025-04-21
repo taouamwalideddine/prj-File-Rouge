@@ -6,6 +6,7 @@ use App\Models\Question;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class QuizController extends Controller
 {
@@ -150,7 +151,16 @@ public function show(Quiz $quiz)
             abort(403);
         }
 
-        $quiz->delete();
+        DB::transaction(function() use ($quiz) {
+            // Delete related records explicitly if not using cascading deletes
+            $quiz->questions()->each(function($question) {
+                $question->answers()->delete();
+                $question->delete();
+            });
+
+            $quiz->results()->delete();
+            $quiz->delete();
+        });
 
         return redirect()->route('teacher.quizzes')
                ->with('success', 'Quiz deleted successfully');

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('quiz_id')->constrained();
+            $table->foreignId('quiz_id')->constrained()->references('id')->on('quizzes')->onDelete('cascade');
             $table->text('content');
             $table->integer('points')->default(1);
             $table->integer('order')->default(0);

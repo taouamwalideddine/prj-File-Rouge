@@ -30,126 +30,136 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    //encode questions data
-    const questions = @json($quiz->questions->map(function($q) {
+    const questions = {!! $quiz->questions->map(function($q) {
         return [
             'id' => $q->id,
             'content' => $q->content,
             'points' => $q->points,
-            'answers' => $q->answers->map(fn($a) => [
-                'id' => $a->id,
-                'content' => $a->content
-            ])
+            'answers' => $q->answers->map(function($a) {
+                return [
+                    'id' => $a->id,
+                    'content' => $a->content
+                ];
+            })
         ];
-    }));
+    })->toJson() !!};
 
     let currentQuestion = 0;
     const answers = {};
-    const questionContainer = document.getElementById('questionContainer');
     const totalQuestions = questions.length;
+    const questionContainer = document.getElementById('questionContainer');
+    const progressContainer = document.getElementById('progressContainer');
 
-    function showQuestion(index) {
-        const question = questions[index];
-        const isLast = index === totalQuestions - 1;
-
-        let html = `
-            <div class="question-card p-4 border rounded-lg mb-4">
-                <div class="flex justify-between items-start mb-4">
-                    <h3 class="font-medium">
-                        <span class="text-gray-500">${index + 1}/${totalQuestions}</span>
-                        ${question.content}
-                    </h3>
-                    <span class="text-sm text-gray-500">${question.points} points</span>
-                </div>
-                <div class="space-y-2">`;
-
-        question.answers.forEach(answer => {
-            const isChecked = answers[question.id] === answer.id;
-            html += `
-                <label class="block p-2 border rounded hover:bg-gray-50 transition-colors ${isChecked ? 'bg-blue-50 border-blue-200' : ''}">
-                    <input type="radio"
-                           name="answers[${question.id}]"
-                           value="${answer.id}"
-                           ${isChecked ? 'checked' : ''}
-                           class="mr-2 align-middle">
-                    ${answer.content}
-                </label>`;
-        });
-
-        html += `</div></div>`;
-        questionContainer.innerHTML = html;
-
-        document.getElementById('prevBtn').classList.toggle('hidden', index === 0);
-        document.getElementById('nextBtn').classList.toggle('hidden', isLast);
-        document.getElementById('submitBtn').classList.toggle('hidden', !isLast);
+    // Initialize quiz
+    function initQuiz() {
+        updateProgress();
+        showQuestion(currentQuestion);
+        setupTimer();
     }
 
-    // navigation handlers
-    function handleNavigation(direction) {
-        const selected = document.querySelector('input[name^="answers"]:checked');
-        if (!selected) {
-            alert('Please select an answer before continuing!');
-            return;
-        }
+// display current
+    function showQuestion(index) {
+        const question = questions[index];
+        const isLastQuestion = index === totalQuestions - 1;
 
-        saveAnswer();
-        currentQuestion = Math.max(0, Math.min(totalQuestions - 1, currentQuestion + direction));
+        questionContainer.innerHTML = `
+            <div class="question-card p-4 border rounded-lg mb-4">
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="font-medium">Question ${index + 1}/${totalQuestions}</h3>
+                    <span class="text-sm text-gray-500">${question.points} pts</span>
+                </div>
+                <p class="mb-4">${question.content}</p>
+                <div class="space-y-2">
+                    ${question.answers.map(answer => `
+                        <label class="block p-2 border rounded hover:bg-gray-50 transition-colors">
+                            <input type="radio"
+                                   name="answers[${question.id}]"
+                                   value="${answer.id}"
+                                   ${answers[question.id] === answer.id ? 'checked' : ''}
+                                   class="mr-2">
+                            ${answer.content}
+                        </label>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+
+        document.getElementById('prevBtn').classList.toggle('hidden', index === 0);
+        document.getElementById('nextBtn').classList.toggle('hidden', isLastQuestion);
+        document.getElementById('submitBtn').classList.toggle('hidden', !isLastQuestion);
+    }
+
+// keepup progress
+    function updateProgress() {
+        if (progressContainer) {
+            const answeredCount = Object.keys(answers).length;
+            progressContainer.innerHTML = `Progress: ${answeredCount}/${totalQuestions} answered`;
+        }
+    }
+
+// navigation handlers
+    function navigate(direction) {
+        saveCurrentAnswer();
+        currentQuestion += direction;
         showQuestion(currentQuestion);
     }
 
-    document.getElementById('nextBtn').addEventListener('click', () => handleNavigation(1));
-    document.getElementById('prevBtn').addEventListener('click', () => handleNavigation(-1));
-
-    // aswer tracking
-    function saveAnswer() {
+    function saveCurrentAnswer() {
         const selected = document.querySelector('input[name^="answers"]:checked');
         if (selected) {
             const questionId = selected.name.match(/\[(.*?)\]/)[1];
             answers[questionId] = selected.value;
+            updateProgress();
         }
     }
 
-    // timer implementation
-    @if($quiz->expires_at)
-    const expiryTime = new Date('{{ $quiz->expires_at->toIso8601String() }}').getTime();
+// timer
+    function setupTimer() {
+        @if($quiz->expires_at)
+        const expiryTime = new Date('{{ $quiz->expires_at }}').getTime();
+        const timerElement = document.getElementById('timer');
 
-    const updateTimer = () => {
-        const now = Date.now();
-        const distance = expiryTime - now;
+        const updateTimer = () => {
+            const now = new Date().getTime();
+            const distance = expiryTime - now;
 
-        if (distance <= 0) {
-            clearInterval(timer);
-            document.getElementById('timer').textContent = "TIME EXPIRED";
-            document.getElementById('quizForm').submit();
-            return;
-        }
+            if (distance <= 0) {
+                timerElement.innerHTML = "TIME EXPIRED";
+                document.getElementById('quizForm').submit();
+                return;
+            }
 
-        const hours = Math.floor(distance / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            const hours = Math.floor(distance / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        document.getElementById('timer').textContent =
-            `${hours}h ${minutes}m ${seconds}s remaining`;
-    };
+            timerElement.innerHTML = `${hours}h ${minutes}m ${seconds}s remaining`;
+        };
 
-    const timer = setInterval(updateTimer, 1000);
-    updateTimer();
-    @endif
+        updateTimer();
+        const timer = setInterval(updateTimer, 1000);
+        @endif
+    }
 
-    // form validation
+// validation
     document.getElementById('quizForm').addEventListener('submit', function(e) {
-        const unanswered = questions.filter(q => !answers.hasOwnProperty(q.id));
+        saveCurrentAnswer();
 
-        if (unanswered.length > 0) {
+        if (Object.keys(answers).length < totalQuestions) {
             e.preventDefault();
-            alert(`Please answer all questions! (${unanswered.length} remaining)`);
-            currentQuestion = questions.findIndex(q => q.id === unanswered[0].id);
+            alert(`Please answer all questions before submitting.
+                   You have ${totalQuestions - Object.keys(answers).length} unanswered.`);
+// select unasnwered question
+                   const firstUnanswered = questions.findIndex(q => !answers.hasOwnProperty(q.id));
+            currentQuestion = Math.max(0, firstUnanswered);
             showQuestion(currentQuestion);
         }
     });
 
-    // initialize first question
-    showQuestion(0);
+    document.getElementById('nextBtn').addEventListener('click', () => navigate(1));
+    document.getElementById('prevBtn').addEventListener('click', () => navigate(-1));
+
+    initQuiz();
 });
 </script>
 @endsection
