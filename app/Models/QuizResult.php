@@ -32,4 +32,22 @@ class QuizResult extends Model
     {
         return $this->belongsTo(User::class, 'student_id');
     }
+
+
+public function getScorePercentageAttribute()
+{
+    return round(($this->score / $this->total_points) * 100);
+}
+
+public function getCorrectAnswersCountAttribute()
+{
+    return collect($this->answer_details)
+           ->where('is_correct', true)
+           ->count();
+}
+
+public function getTotalPointsAttribute()
+{
+    return $this->quiz->questions->sum('points');
+}
 }
