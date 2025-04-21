@@ -56,6 +56,8 @@
                 @php
                     $userAnswer = $result->answer_details[$question->id] ?? null;
                     $isCorrect = $userAnswer['is_correct'] ?? false;
+                    $userAnswerContent = $userAnswer['content'] ?? 'No answer provided';
+                    $correctAnswer = $question->answers->where('is_correct', true)->first();
                 @endphp
 
                 <div class="bg-white rounded-xl shadow-md overflow-hidden border-l-4
@@ -95,33 +97,19 @@
                         <!-- User's Answer -->
                         <div class="mt-4 pl-10">
                             <p class="text-sm font-medium text-gray-700">Your answer:</p>
-                            @if($userAnswer)
-                                <div class="mt-1 p-3 rounded-lg
-                                    @if($isCorrect) bg-green-50 border border-green-200
-                                    @else bg-red-50 border border-red-200 @endif">
-                                    <p>{{ $question->answers->find($userAnswer['answer_id'])->content }}</p>
-                                </div>
-                            @else
-                                <p class="text-sm text-gray-500">No answer provided</p>
-                            @endif
+                            <div class="mt-1 p-3 rounded-lg
+                                @if($isCorrect) bg-green-50 border border-green-200
+                                @else bg-red-50 border border-red-200 @endif">
+                                <p>{{ $userAnswerContent }}</p>
+                            </div>
                         </div>
 
                         <!-- Correct Answer (if wrong) -->
-                        @if(!$isCorrect)
+                        @if(!$isCorrect && $correctAnswer)
                             <div class="mt-4 pl-10">
                                 <p class="text-sm font-medium text-gray-700">Correct answer:</p>
                                 <div class="mt-1 p-3 rounded-lg bg-green-50 border border-green-200">
-                                    <p>{{ $question->answers->where('is_correct', true)->first()->content }}</p>
-                                </div>
-                            </div>
-                        @endif
-
-                        <!-- Explanation (optional) -->
-                        @if($question->explanation)
-                            <div class="mt-4 pl-10">
-                                <p class="text-sm font-medium text-gray-700">Explanation:</p>
-                                <div class="mt-1 p-3 rounded-lg bg-blue-50 border border-blue-200">
-                                    <p>{{ $question->explanation }}</p>
+                                    <p>{{ $correctAnswer->content }}</p>
                                 </div>
                             </div>
                         @endif
