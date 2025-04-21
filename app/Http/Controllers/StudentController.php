@@ -104,11 +104,68 @@ class StudentController extends Controller
     {
         $student = Auth::user();
 
-        $this->validateQuizAccess($student, $quiz);
+        if ($quiz->results()->where('student_id', $student->id)->exists()) {
+            abort(403, 'You have already taken this quiz');
+        }
 
-        $this->validateAllQuestionsAnswered($request, $quiz);
+        if ($quiz->expires_at && $quiz->expires_at->isPast()) {
+            abort(403, 'This quiz has expired');
+        }
 
-        return $this->processQuizSubmission($request, $quiz, $student);
+        $answeredQuestionIds = array_keys($request->input('answers', []));
+        $requiredQuestionIds = $quiz->questions->pluck('id')->toArray();
+
+        if (count(array_diff($requiredQuestionIds, $answeredQuestionIds)) > 0) {
+            return back()->withErrors(['answers' => 'You must answer all questions before submitting.']);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $score = 0;
+            $answers = [];
+
+            foreach ($quiz->questions as $question) {
+                $answerId = $request->input("answers.{$question->id}");
+                $answer = $question->answers()->find($answerId);
+                $isCorrect = $answer ? $answer->is_correct : false;
+
+                if ($isCorrect) {
+                    $score += $question->points;
+                }
+
+                StudentAnswer::create([
+                    'student_id' => $student->id,
+                    'question_id' => $question->id,
+                    'answer_id' => $answerId,
+                    'is_correct' => $isCorrect
+                ]);
+
+                $answers[$question->id] = [
+                    'answer_id' => $answerId,
+                    'is_correct' => $isCorrect,
+                    'points' => $isCorrect ? $question->points : 0,
+                    'content' => $answer ? $answer->content : null
+                ];
+            }
+
+            $result = QuizResult::create([
+                'quiz_id' => $quiz->id,
+                'student_id' => $student->id,
+                'score' => $score,
+                'total_questions' => $quiz->questions->count(),
+                'answer_details' => $answers,
+                'completed_at' => now()
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('student.quiz.results', $result);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'An error occurred while submitting your quiz.']);
+        }
     }
 
     protected function validateQuizAccess(User $student, Quiz $quiz)

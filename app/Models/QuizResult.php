@@ -14,15 +14,17 @@ class QuizResult extends Model
         'student_id',
         'score',
         'total_questions',
+        'total_points',
         'answer_details',
-        'completed_at',
+        'completed_at'
     ];
 
     protected $casts = [
         'answer_details' => 'array',
-        'completed_at' => 'datetime',
+        'completed_at' => 'datetime'
     ];
 
+    // Relationships
     public function quiz()
     {
         return $this->belongsTo(Quiz::class);
@@ -33,21 +35,22 @@ class QuizResult extends Model
         return $this->belongsTo(User::class, 'student_id');
     }
 
+    public function getScorePercentageAttribute()
+    {
+        return $this->total_points > 0
+            ? round(($this->score / $this->total_points) * 100, 2)
+            : 0;
+    }
 
-public function getScorePercentageAttribute()
-{
-    return round(($this->score / $this->total_points) * 100);
-}
+    public function getCorrectAnswersCountAttribute()
+    {
+        return collect($this->answer_details)
+            ->filter(fn($answer) => $answer['is_correct'])
+            ->count();
+    }
 
-public function getCorrectAnswersCountAttribute()
-{
-    return collect($this->answer_details)
-           ->where('is_correct', true)
-           ->count();
-}
-
-public function getTotalPointsAttribute()
-{
-    return $this->quiz->questions->sum('points');
-}
+    public function getTotalPointsAttribute()
+    {
+        return $this->quiz->questions->sum('points');
+    }
 }

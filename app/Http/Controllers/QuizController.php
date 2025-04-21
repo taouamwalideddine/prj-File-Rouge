@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Question;
 use App\Models\Quiz;
+use App\Models\QuizResult;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -145,6 +146,17 @@ public function show(Quiz $quiz)
         return response()->json(['success' => true]);
     }
 
+    public function quizResults(QuizResult $result)
+{
+    if ($result->student_id !== Auth::id()) {
+        abort(403);
+    }
+
+    return view('student.quizzes.results', [
+        'result' => $result->load(['quiz.questions.answers'])
+    ]);
+}
+
     public function destroy(Quiz $quiz)
     {
         if ($quiz->user_id !== Auth::id()) {
@@ -152,7 +164,6 @@ public function show(Quiz $quiz)
         }
 
         DB::transaction(function() use ($quiz) {
-            // Delete related records explicitly if not using cascading deletes
             $quiz->questions()->each(function($question) {
                 $question->answers()->delete();
                 $question->delete();
