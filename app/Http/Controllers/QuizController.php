@@ -31,13 +31,15 @@ class QuizController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'type' => 'required|in:mcq,tf'
+            'type' => 'required|in:mcq,tf',
+            'expires_at' => 'nullable|date'
         ]);
 
         $quiz = Quiz::create([
             'title' => $request->title,
             'description' => $request->description,
             'type' => $request->type,
+            'expires_at' => $request->expires_at,
             'classroom_id' => Auth::user()->classroom->id,
             'user_id' => Auth::id()
         ]);
@@ -82,7 +84,7 @@ public function show(Quiz $quiz)
         } else {
             $question->answers()->createMany([
                 [
-                    'content' => 'True', 
+                    'content' => 'True',
                     'is_correct' => $request->correct_answer == 0
                 ],
                 [

@@ -22,6 +22,9 @@
                             <p class="text-sm text-gray-500">
                                 {{ $quiz->questions->count() }} questions |
                                 {{ $quiz->classroom->name }}
+                                @if($quiz->expires_at)
+                                    | Expires: {{ $quiz->expires_at->format('M d, Y H:i') }}
+                                @endif
                             </p>
                         </div>
                         <div class="flex space-x-2">

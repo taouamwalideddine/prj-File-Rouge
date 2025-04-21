@@ -25,6 +25,12 @@
                 <textarea name="description" class="w-full p-2 border rounded" rows="3"></textarea>
             </div>
 
+            <div>
+                <label class="block text-sm font-medium mb-1">Expiration Date</label>
+                <input type="datetime-local" name="expires_at" class="w-full p-2 border rounded">
+                <p class="text-xs text-gray-500 mt-1">Leave empty for no expiration</p>
+            </div>
+
             <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
                 Create Quiz
             </button>

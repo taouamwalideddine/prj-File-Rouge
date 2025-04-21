@@ -70,7 +70,10 @@ class TeacherController extends Controller
 
     public function quizzes()
     {
-        $quizzes = Auth::user()->classroom->quizzes()->latest()->paginate(10);
+        $quizzes = Auth::user()->classroom->quizzes()
+        ->withCount('questions')
+        ->latest()
+        ->paginate(10);
 
         return view('teacher.quizzes.index', [
             'quizzes' => $quizzes
