@@ -28,18 +28,18 @@ class QuizController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'type' => 'required|in:mcq,tf',
-            'expires_at' => 'nullable|date'
+            'expires_at' => 'nullable|date|after:now'
         ]);
 
         $quiz = Quiz::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'type' => $request->type,
-            'expires_at' => $request->expires_at,
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'type' => $validated['type'],
+            'expires_at' => $validated['expires_at'],
             'classroom_id' => Auth::user()->classroom->id,
             'user_id' => Auth::id()
         ]);
