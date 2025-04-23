@@ -67,5 +67,12 @@ class Quiz extends Model
 {
         return $this->questions->sum('points');
 }
+public function podium()
+{
+    return $this->hasMany(QuizResult::class)
+        ->orderByDesc('score')
+        ->with('student')
+        ->take(5);
+}
 
 }

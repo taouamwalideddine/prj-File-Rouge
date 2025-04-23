@@ -75,9 +75,6 @@
                     <a href="#features" class="bg-transparent border-2 border-white py-3 px-8 rounded-lg font-bold hover:bg-white hover:text-indigo-600 transition-all">Learn More</a>
                 </div>
             </div>
-            <div class="md:w-1/2 mt-12 md:mt-0 animate-float">
-                <img src="/api/placeholder/600/400" alt="QuizHub Dashboard" class="rounded-lg shadow-2xl" />
-            </div>
         </div>
     </div>
 
