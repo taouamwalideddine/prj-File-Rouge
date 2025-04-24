@@ -19,6 +19,9 @@
                 <!-- Questions will be loaded here dynamically -->
             </div>
 
+            <!-- Hidden inputs for storing answers -->
+            <div id="hiddenAnswers"></div>
+
             <div class="mt-8 flex justify-between">
                 <button type="button" id="prevBtn" class="bg-gray-500 text-white px-4 py-2 rounded hidden">Previous</button>
                 <button type="button" id="nextBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Next Question</button>
@@ -48,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const answers = {};
     const totalQuestions = questions.length;
     const questionContainer = document.getElementById('questionContainer');
+    const hiddenAnswers = document.getElementById('hiddenAnswers');
     const progressContainer = document.getElementById('progressContainer');
 
     // Initialize quiz
@@ -57,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
         setupTimer();
     }
 
-// display current
+    // display current
     function showQuestion(index) {
         const question = questions[index];
         const isLastQuestion = index === totalQuestions - 1;
@@ -73,7 +77,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     ${question.answers.map(answer => `
                         <label class="block p-2 border rounded hover:bg-gray-50 transition-colors">
                             <input type="radio"
-                                   name="answers[${question.id}]"
+                                   name="current_answer"
+                                   data-question-id="${question.id}"
                                    value="${answer.id}"
                                    ${answers[question.id] === answer.id ? 'checked' : ''}
                                    class="mr-2">
@@ -89,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('submitBtn').classList.toggle('hidden', !isLastQuestion);
     }
 
-// keepup progress
+    // keepup progress
     function updateProgress() {
         if (progressContainer) {
             const answeredCount = Object.keys(answers).length;
@@ -97,7 +102,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-// navigation handlers
+    // Update hidden inputs for form submission
+    function updateHiddenInputs() {
+        hiddenAnswers.innerHTML = '';
+
+        // Create hidden inputs for each saved answer
+        for (const questionId in answers) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = `answers[${questionId}]`;
+            input.value = answers[questionId];
+            hiddenAnswers.appendChild(input);
+        }
+    }
+
+    // navigation handlers
     function navigate(direction) {
         saveCurrentAnswer();
         currentQuestion += direction;
@@ -105,15 +124,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function saveCurrentAnswer() {
-        const selected = document.querySelector('input[name^="answers"]:checked');
+        const selected = document.querySelector('input[name="current_answer"]:checked');
         if (selected) {
-            const questionId = selected.name.match(/\[(.*?)\]/)[1];
+            const questionId = selected.getAttribute('data-question-id');
             answers[questionId] = selected.value;
             updateProgress();
+            updateHiddenInputs();
         }
     }
 
-// timer
+    // timer
     function setupTimer() {
         @if($quiz->expires_at)
         const expiryTime = new Date('{{ $quiz->expires_at }}').getTime();
@@ -125,6 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (distance <= 0) {
                 timerElement.innerHTML = "TIME EXPIRED";
+                updateHiddenInputs();
                 document.getElementById('quizForm').submit();
                 return;
             }
@@ -141,16 +162,16 @@ document.addEventListener('DOMContentLoaded', function() {
         @endif
     }
 
-// validation
     document.getElementById('quizForm').addEventListener('submit', function(e) {
         saveCurrentAnswer();
+        updateHiddenInputs();
+        // makes sure all answers are included before submission
 
         if (Object.keys(answers).length < totalQuestions) {
             e.preventDefault();
             alert(`Please answer all questions before submitting.
                    You have ${totalQuestions - Object.keys(answers).length} unanswered.`);
-// select unasnwered question
-                   const firstUnanswered = questions.findIndex(q => !answers.hasOwnProperty(q.id));
+            const firstUnanswered = questions.findIndex(q => !answers.hasOwnProperty(q.id));
             currentQuestion = Math.max(0, firstUnanswered);
             showQuestion(currentQuestion);
         }

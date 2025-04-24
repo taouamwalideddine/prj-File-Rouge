@@ -16,6 +16,53 @@
         </div>
     </div>
 
+    <div class="mb-8">
+        <h3 class="font-medium mb-4">Top Performers</h3>
+
+        @if($quiz->podium->isEmpty())
+            <p class="text-gray-500">No results yet</p>
+        @else
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- 2nd Place -->
+                @if($quiz->podium->count() >= 2)
+                <div class="bg-gray-100 p-4 rounded-lg text-center">
+                    <div class="h-12 w-12 mx-auto bg-gray-300 rounded-full flex items-center justify-center mb-2">2</div>
+                    <h4 class="font-medium">{{ $quiz->podium[1]->student->name }}</h4>
+                    <p class="text-blue-600 font-bold">{{ $quiz->podium[1]->score }} pts</p>
+                </div>
+                @endif
+
+                <!-- 1st Place (Centered and taller) -->
+                <div class="bg-yellow-50 p-4 rounded-lg text-center border border-yellow-200">
+                    <div class="h-16 w-16 mx-auto bg-yellow-300 rounded-full flex items-center justify-center mb-2">1</div>
+                    <h4 class="font-medium">{{ $quiz->podium[0]->student->name }}</h4>
+                    <p class="text-yellow-600 font-bold">{{ $quiz->podium[0]->score }} pts</p>
+                </div>
+
+                <!-- 3rd Place -->
+                @if($quiz->podium->count() >= 3)
+                <div class="bg-gray-100 p-4 rounded-lg text-center">
+                    <div class="h-12 w-12 mx-auto bg-amber-300 rounded-full flex items-center justify-center mb-2">3</div>
+                    <h4 class="font-medium">{{ $quiz->podium[2]->student->name }}</h4>
+                    <p class="text-amber-600 font-bold">{{ $quiz->podium[2]->score }} pts</p>
+                </div>
+                @endif
+            </div>
+
+            <!-- Additional top performers (4th-5th) -->
+            @if($quiz->podium->count() > 3)
+            <div class="mt-4 grid grid-cols-2 gap-2">
+                @foreach($quiz->podium->slice(3) as $index => $result)
+                <div class="bg-gray-50 p-3 rounded-lg flex justify-between items-center">
+                    <span class="font-medium">{{ $index + 4 }}. {{ $result->student->name }}</span>
+                    <span class="text-gray-600">{{ $result->score }} pts</span>
+                </div>
+                @endforeach
+            </div>
+            @endif
+        @endif
+    </div>
+    
     <!-- Questions Section -->
     <div class="mt-8">
         <div class="flex justify-between items-center mb-4">
