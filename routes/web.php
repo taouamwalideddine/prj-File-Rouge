@@ -5,6 +5,7 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Route;
+use App\Events\TestEvent;
 
 // Public Routes
 Route::get('/', function () {
@@ -66,6 +67,12 @@ Route::middleware(['auth', 'student'])->prefix('student')->group(function () {
     Route::post('/quizzes/{quiz}', [StudentController::class, 'submitQuiz'])->name('student.quizzes.submit');
     Route::get('/results/{result}', [StudentController::class, 'quizResults'])->name('student.quiz.results');
 });
+
+Route::get('/test-pusher', function () {
+    broadcast(new TestEvent('Hello from Laravel!'));
+    return 'Event broadcasted!';
+});
+
 
 // Fallback Route
 Route::fallback(function () {
