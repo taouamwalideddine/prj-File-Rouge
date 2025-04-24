@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('quizForm').addEventListener('submit', function(e) {
         saveCurrentAnswer();
         updateHiddenInputs();
-        // makes sure all answers are included before submission
+        // makes sure all answers are included before sub;iting
 
         if (Object.keys(answers).length < totalQuestions) {
             e.preventDefault();
