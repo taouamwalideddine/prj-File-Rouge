@@ -1,4 +1,3 @@
-<!-- resources/views/student/quizzes/take.blade.php -->
 @extends('layouts.student')
 
 @section('content')
@@ -6,26 +5,47 @@
     <div class="bg-white rounded-lg shadow p-6">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold">{{ $quiz->title }}</h1>
-            <div class="text-gray-600">
-                @if($quiz->expires_at)
-                    <div id="timer" class="font-medium text-red-600"></div>
-                @endif
-            </div>
+            @if($quiz->expires_at)
+                <div id="quizTimer" class="font-medium text-red-600"></div>
+            @endif
         </div>
 
         <form id="quizForm" action="{{ route('student.quizzes.submit', $quiz) }}" method="POST">
             @csrf
             <div id="questionContainer">
-                <!-- Questions will be loaded here dynamically -->
             </div>
 
-            <!-- Hidden inputs for storing answers -->
-            <div id="hiddenAnswers"></div>
+            <div class="mt-8 flex justify-center items-center">
+                <div class="relative w-16 h-16 mr-4">
+                    <svg class="w-full h-full" viewBox="0 0 36 36">
+                        <path
+                            d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                            fill="none"
+                            stroke="#e0e0e0"
+                            stroke-width="3"
+                        />
+                        <path
+                            id="timerCircle"
+                            d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                            fill="none"
+                            stroke="#3b82f6"
+                            stroke-width="3"
+                            stroke-dasharray="100, 100"
+                        />
+                        <text x="18" y="20" text-anchor="middle" font-size="10" fill="#333" id="timerText">10</text>
+                    </svg>
+                </div>
 
-            <div class="mt-8 flex justify-between">
-                <button type="button" id="prevBtn" class="bg-gray-500 text-white px-4 py-2 rounded hidden">Previous</button>
-                <button type="button" id="nextBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Next Question</button>
-                <button type="submit" id="submitBtn" class="bg-green-600 text-white px-4 py-2 rounded hidden">Submit Quiz</button>
+                <button type="button" id="nextBtn" class="bg-blue-600 text-white px-6 py-2 rounded-lg">
+                    Next Question
+                </button>
+                <button type="submit" id="submitBtn" class="bg-green-600 text-white px-6 py-2 rounded-lg hidden">
+                    Submit Quiz
+                </button>
             </div>
         </form>
     </div>
@@ -49,140 +69,144 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let currentQuestion = 0;
     const answers = {};
-    const timeSpent = {};
     const questionTimeLimit = 10;
-    let questionTimer;
     let timeLeft = questionTimeLimit;
+    let questionTimer;
     const totalQuestions = questions.length;
-    let quizStartTime = Date.now();
 
     const questionContainer = document.getElementById('questionContainer');
-    const timerBar = document.getElementById('timerBar');
-    const timeBonusDisplay = document.getElementById('timeBonus');
-    const basePointsDisplay = document.getElementById('basePoints');
-    const totalPointsDisplay = document.getElementById('totalPoints');
+    const timerCircle = document.getElementById('timerCircle');
+    const timerText = document.getElementById('timerText');
 
     function initQuiz() {
         showQuestion(currentQuestion);
         startQuestionTimer();
-        updatePointsDisplay(0, 0);
     }
 
     function showQuestion(index) {
         clearInterval(questionTimer);
         timeLeft = questionTimeLimit;
-        updateTimerBar();
+        updateTimerDisplay();
 
         const question = questions[index];
         questionContainer.innerHTML = `
-            <div class="question-card p-4 border rounded-lg mb-4">
-                <div class="flex justify-between items-start mb-4">
-                    <h3 class="font-medium">Question ${index + 1}/${totalQuestions}</h3>
-                    <span class="text-sm text-gray-500">Base: ${question.points} pts</span>
-                </div>
-                <div class="h-2 bg-gray-200 rounded-full mb-4">
-                    <div id="timerBar" class="h-full bg-blue-600 rounded-full" style="width:100%"></div>
-                </div>
-                <p class="mb-4">${question.content}</p>
-                <div class="space-y-2">
+            <div class="question-card p-4 border rounded-lg mb-6">
+                <h3 class="font-medium mb-4">Question ${index + 1} of ${totalQuestions}</h3>
+                <p class="mb-4 text-lg">${question.content}</p>
+                <div class="space-y-3">
                     ${question.answers.map(answer => `
-                        <label class="block p-2 border rounded hover:bg-gray-50 transition-colors">
+                        <label class="flex items-center p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
                             <input type="radio"
-                                   name="answers[${question.id}]"
+                                   name="current_answer"
+                                   data-question-id="${question.id}"
                                    value="${answer.id}"
-                                   ${answers[question.id] === answer.id ? 'checked' : ''}
-                                   class="mr-2">
-                            ${answer.content}
+                                   class="mr-3 h-5 w-5">
+                            <span>${answer.content}</span>
                         </label>
                     `).join('')}
                 </div>
             </div>
         `;
 
-        document.getElementById('prevBtn').classList.toggle('hidden', index === 0);
+        if (answers[question.id]) {
+            document.querySelector(`input[value="${answers[question.id]}"]`).checked = true;
+        }
+
         document.getElementById('nextBtn').classList.toggle('hidden', index === totalQuestions - 1);
         document.getElementById('submitBtn').classList.toggle('hidden', index !== totalQuestions - 1);
     }
 
     function startQuestionTimer() {
-        clearInterval(questionTimer);
-        timeLeft = questionTimeLimit;
-        updateTimerBar();
-
         questionTimer = setInterval(() => {
             timeLeft--;
-            updateTimerBar();
+            updateTimerDisplay();
 
             if (timeLeft <= 0) {
                 clearInterval(questionTimer);
-                if (currentQuestion < totalQuestions - 1) {
-                    navigate(1);
-                } else {
-                    document.getElementById('submitBtn').click();
-                }
+                autoAdvance();
             }
         }, 1000);
     }
 
-    function updateTimerBar() {
+    function updateTimerDisplay() {
         const percentage = (timeLeft / questionTimeLimit) * 100;
-        const color = percentage > 50 ? 'bg-blue-600' :
-                     percentage > 25 ? 'bg-yellow-500' : 'bg-red-500';
+        const dashOffset = 100 - percentage;
 
-        timerBar.className = `h-full ${color} rounded-full transition-all duration-1000`;
-        timerBar.style.width = `${percentage}%`;
-    }
+        timerCircle.setAttribute('stroke-dashoffset', dashOffset);
+        timerText.textContent = timeLeft;
 
-    function calculateTimeBonus(timeSpent, basePoints) {
-        const maxBonus = basePoints * 0.5;
-        const bonus = Math.max(0, maxBonus * (1 - (timeSpent / questionTimeLimit)));
-        return Math.round(bonus);
-    }
-
-    function updatePointsDisplay(basePoints, bonusPoints) {
-        basePointsDisplay.textContent = basePoints;
-        timeBonusDisplay.textContent = bonusPoints;
-        totalPointsDisplay.textContent = basePoints + bonusPoints;
-    }
-
-    function navigate(direction) {
-        saveCurrentAnswer();
-        currentQuestion += direction;
-        showQuestion(currentQuestion);
-        startQuestionTimer();
-    }
-
-    function saveCurrentAnswer() {
-        const selected = document.querySelector('input[name^="answers"]:checked');
-        if (selected) {
-            const questionId = selected.name.match(/\[(.*?)\]/)[1];
-            answers[questionId] = selected.value;
-            timeSpent[questionId] = questionTimeLimit - timeLeft;
-
-            const question = questions[currentQuestion];
-            const bonus = calculateTimeBonus(timeSpent[questionId], question.points);
-            updatePointsDisplay(question.points, bonus);
+        if (timeLeft <= 3) {
+            timerCircle.setAttribute('stroke', '#ef4444'); // red
+        } else if (timeLeft <= 7) {
+            timerCircle.setAttribute('stroke', '#f59e0b'); // orange
+        } else {
+            timerCircle.setAttribute('stroke', '#3b82f6'); // blue
         }
     }
+
+    function autoAdvance() {
+        saveCurrentAnswer();
+        if (currentQuestion < totalQuestions - 1) {
+            currentQuestion++;
+            timeLeft = questionTimeLimit;
+            showQuestion(currentQuestion);
+            startQuestionTimer();
+        } else {
+            document.getElementById('submitBtn').click();
+        }
+    }
+
+    // Navigation
+    function saveCurrentAnswer() {
+        const selected = document.querySelector('input[name="current_answer"]:checked');
+        if (selected) {
+            const questionId = selected.getAttribute('data-question-id');
+            answers[questionId] = selected.value;
+        }
+    }
+
+    function advanceQuestion() {
+        saveCurrentAnswer();
+        if (currentQuestion < totalQuestions - 1) {
+            currentQuestion++;
+            timeLeft = questionTimeLimit;
+            showQuestion(currentQuestion);
+            startQuestionTimer();
+        }
+    }
+
+    // Event listeners
+    document.getElementById('nextBtn').addEventListener('click', advanceQuestion);
 
     document.getElementById('quizForm').addEventListener('submit', function(e) {
         saveCurrentAnswer();
 
+        // Prepare all answers for submission
+        const hiddenInputs = Object.entries(answers).map(([questionId, answerId]) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = `answers[${questionId}]`;
+            input.value = answerId;
+            return input;
+        });
+
+        // Clear and add new hidden inputs
+        const hiddenContainer = document.createElement('div');
+        hiddenInputs.forEach(input => hiddenContainer.appendChild(input));
+        this.appendChild(hiddenContainer);
+
         if (Object.keys(answers).length < totalQuestions) {
             e.preventDefault();
             alert(`Please answer all questions before submitting.
-                   You have ${totalQuestions - Object.keys(answers).length} unanswered.`);
+                   ${totalQuestions - Object.keys(answers).length} remaining.`);
             currentQuestion = questions.findIndex(q => !answers.hasOwnProperty(q.id));
             showQuestion(currentQuestion);
-        } else {
-            const timeBonusInput = document.createElement('input');
-            timeBonusInput.type = 'hidden';
-            timeBonusInput.name = 'time_bonus';
-            timeBonusInput.value = JSON.stringify(timeSpent);
-            this.appendChild(timeBonusInput);
+            startQuestionTimer();
         }
     });
 
+    // Start the quiz
     initQuiz();
 });
 </script>
+@endsection
