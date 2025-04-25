@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\QuizPublished;
 use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\QuizResult;
@@ -46,8 +47,10 @@ class QuizController extends Controller
             'user_id' => Auth::id()
         ]);
 
+        event(new QuizPublished($quiz));
+
         return redirect()->route('teacher.quizzes.show', $quiz)
-               ->with('success', 'Quiz created! Now add questions.');
+               ->with('success', 'Quiz created! Students have been notified.');
     }
 
 public function show(Quiz $quiz)
