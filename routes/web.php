@@ -68,10 +68,11 @@ Route::middleware(['auth', 'student'])->prefix('student')->group(function () {
     Route::get('/results/{result}', [StudentController::class, 'quizResults'])->name('student.quiz.results');
 });
 
-Route::get('/test-pusher', function () {
-    broadcast(new TestEvent('Hello from Laravel!'));
-    return 'Event broadcasted!';
+Route::get('/test-broadcast', function () {
+    broadcast(new TestEvent());
+    return 'Broadcast sent';
 });
+
 
 
 // Fallback Route
