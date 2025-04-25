@@ -4,14 +4,10 @@ namespace App\Events;
 
 use App\Models\Quiz;
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Foundation\Events\Dispatchable;
 
 class QuizPublished implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets;
-
     public $quiz;
     public $message;
 
@@ -29,5 +25,18 @@ class QuizPublished implements ShouldBroadcast
     public function broadcastAs()
     {
         return 'quiz.published';
+    }
+
+    public function broadcastWith()
+    {
+        return [
+            'message' => $this->message,
+            'quiz' => [
+                'id' => $this->quiz->id,
+                'title' => $this->quiz->title,
+                'expires_at' => $this->quiz->expires_at?->toDateTimeString()
+            ],
+            'classroom_id' => $this->quiz->classroom_id
+        ];
     }
 }
