@@ -46,11 +46,6 @@ class QuizController extends Controller
             'classroom_id' => Auth::user()->classroom->id,
             'user_id' => Auth::id()
         ]);
-
-        event(new QuizPublished($quiz));
-
-        return redirect()->route('teacher.quizzes.show', $quiz)
-               ->with('success', 'Quiz created! Students have been notified.');
     }
 
 public function show(Quiz $quiz)
