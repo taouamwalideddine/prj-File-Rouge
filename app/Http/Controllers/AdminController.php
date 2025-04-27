@@ -4,116 +4,79 @@ namespace App\Http\Controllers;
 
 use App\Models\Quiz;
 use App\Models\User;
-use App\Models\ActivityLog;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
     public function dashboard()
     {
-        $stats = [
-            'total_users' => User::count(),
-            'pending_teachers' => User::where('role', 'teacher')
-                                    ->where('status', 'pending')
-                                    ->count(),
-            'active_quizzes' => Quiz::active()->count()
-        ];
-
-        $recentActivity = ActivityLog::latest()
-                                   ->take(5)
-                                   ->get();
-
-        return view('admin.dashboard', compact('stats', 'recentActivity'));
+        return view('admin.dashboard', [
+            'pendingTeachers' => User::where('role', 'teacher')
+                                  ->where('status', 'pending')
+                                  ->count(),
+            'bannedUsers' => User::onlyTrashed()->count(),
+            'quizzesCount' => Quiz::count()
+        ]);
     }
 
-    public function users()
-    {
-        $users = User::withTrashed()
-                    ->latest()
-                    ->paginate(10);
-
-        return view('admin.users.index', compact('users'));
-    }
-
+    // Teacher Approval
     public function pendingTeachers()
     {
-        $teachers = User::where('role', 'teacher')
-                       ->where('status', 'pending')
-                       ->latest()
-                       ->paginate(10);
-
-        return view('admin.teachers.pending', compact('teachers'));
+        return view('admin.teachers.pending', [
+            'teachers' => User::where('role', 'teacher')
+                            ->where('status', 'pending')
+                            ->paginate(10)
+        ]);
     }
 
     public function approveTeacher(User $teacher)
     {
         $teacher->update(['status' => 'approved']);
-
-        ActivityLog::create([
-            'user_id' => Auth::id(),
-            'description' => "Approved teacher: {$teacher->name}"
-        ]);
-
-        return redirect()->route('admin.teachers.pending')
-                       ->with('success', 'Teacher approved successfully');
+        return back()->with('success', "Teacher {$teacher->name} approved");
     }
 
     public function rejectTeacher(User $teacher)
     {
         $teacher->update(['status' => 'rejected']);
+        return back()->with('success', "Teacher {$teacher->name} rejected");
+    }
 
-        ActivityLog::create([
-            'user_id' => Auth::id(),
-            'description' => "Rejected teacher: {$teacher->name}"
+    // User Ban/Unban
+    public function users()
+    {
+        return view('admin.users.index', [
+            'users' => User::withTrashed()
+                         ->latest()
+                         ->paginate(10)
         ]);
-
-        return redirect()->route('admin.teachers.pending')
-                       ->with('success', 'Teacher request rejected');
     }
 
     public function banUser(User $user)
     {
         $user->delete();
-
-        ActivityLog::create([
-            'user_id' => Auth::id(),
-            'description' => "Banned user: {$user->name}"
-        ]);
-
-        return back()->with('success', 'User banned successfully');
+        return back()->with('success', "User {$user->name} banned");
     }
 
-    public function reactivateUser(User $user)
+    public function unbanUser($id)
     {
+        $user = User::withTrashed()->findOrFail($id);
         $user->restore();
-
-        ActivityLog::create([
-            'user_id' => Auth::id(),
-            'description' => "Reactivated user: {$user->name}"
-        ]);
-
-        return back()->with('success', 'User reactivated successfully');
+        return back()->with('success', "User {$user->name} unbanned");
     }
 
+    // Quiz Management
     public function quizzes()
     {
-        $quizzes = Quiz::with(['classroom', 'author'])
-                      ->latest()
-                      ->paginate(10);
-
-        return view('admin.quizzes.index', compact('quizzes'));
+        return view('admin.quizzes.index', [
+            'quizzes' => Quiz::with(['classroom', 'author'])
+                          ->latest()
+                          ->paginate(10)
+        ]);
     }
 
     public function deleteQuiz(Quiz $quiz)
     {
         $quiz->delete();
-
-        ActivityLog::create([
-            'user_id' => Auth::id(),
-            'description' => "Deleted quiz: {$quiz->title}"
-        ]);
-
-        return back()->with('success', 'Quiz deleted successfully');
+        return back()->with('success', "Quiz '{$quiz->title}' deleted");
     }
 }
