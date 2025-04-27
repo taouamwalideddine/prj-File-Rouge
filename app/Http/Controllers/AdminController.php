@@ -6,6 +6,7 @@ use App\Models\Quiz;
 use App\Models\User;
 use App\Models\ActivityLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -50,7 +51,7 @@ class AdminController extends Controller
         $teacher->update(['status' => 'approved']);
 
         ActivityLog::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'description' => "Approved teacher: {$teacher->name}"
         ]);
 
@@ -63,7 +64,7 @@ class AdminController extends Controller
         $teacher->update(['status' => 'rejected']);
 
         ActivityLog::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'description' => "Rejected teacher: {$teacher->name}"
         ]);
 
@@ -76,7 +77,7 @@ class AdminController extends Controller
         $user->delete();
 
         ActivityLog::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'description' => "Banned user: {$user->name}"
         ]);
 
@@ -88,7 +89,7 @@ class AdminController extends Controller
         $user->restore();
 
         ActivityLog::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'description' => "Reactivated user: {$user->name}"
         ]);
 
@@ -109,7 +110,7 @@ class AdminController extends Controller
         $quiz->delete();
 
         ActivityLog::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'description' => "Deleted quiz: {$quiz->title}"
         ]);
 
