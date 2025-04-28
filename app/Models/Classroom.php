@@ -39,10 +39,10 @@ class Classroom extends Model
             ->wherePivot('status', 'pending');
     }
 
-    public function acceptedStudents()
-    {
-        return $this->belongsToMany(User::class, 'classroom_student')
-            ->withTimestamps()
-            ->wherePivot('status', 'accepted');
-    }
+public function acceptedStudents()
+{
+    return $this->belongsToMany(User::class, 'classroom_student')
+                ->whereNotNull('email_verified_at') 
+                ->whereNull('deleted_at');
+}
 }
