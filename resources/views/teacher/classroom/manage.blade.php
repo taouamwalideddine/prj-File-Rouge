@@ -15,7 +15,6 @@
                 <tr class="bg-gray-50">
                     <th class="px-4 py-2 text-left">Student Name</th>
                     <th class="px-4 py-2 text-left">Email</th>
-                    <th class="px-4 py-2 text-left">Joined At</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,7 +22,6 @@
                 <tr class="border-t">
                     <td class="px-4 py-3">{{ $student->name }}</td>
                     <td class="px-4 py-3">{{ $student->email }}</td>
-                    <td class="px-4 py-3">{{ $student->pivot->created_at->format('M d, Y') }}</td>
                 </tr>
                 @endforeach
             </tbody>
