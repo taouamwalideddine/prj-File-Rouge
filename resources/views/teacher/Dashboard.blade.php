@@ -52,8 +52,7 @@
                 </ul>
             </div>
         </div>
-    @else
-        <!-- Approved Teacher Dashboard -->
+        @else
         <div class="mb-6 flex justify-between items-center">
             <h1 class="text-2xl font-bold text-gray-800">Your Classroom: {{ $classroom->name }}</h1>
             <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
