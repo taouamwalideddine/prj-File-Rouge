@@ -24,14 +24,13 @@ class AdminController extends Controller
     {
         return view('admin.teachers.pending', [
             'teachers' => User::where('role', 'teacher')
-                            ->whereNull('email_verified_at')
+                            ->whereNull('deleted_at')
                             ->paginate(10)
         ]);
     }
 
     public function approveTeacher(User $teacher)
     {
-        $teacher->update(['email_verified_at' => now()]);
         return back()->with('success', "Teacher {$teacher->name} approved");
     }
 
@@ -39,6 +38,13 @@ class AdminController extends Controller
     {
         $teacher->delete();
         return back()->with('success', "Teacher {$teacher->name} rejected");
+    }
+
+    public function unbanUser($id)
+    {
+        $user = User::withTrashed()->findOrFail($id);
+        $user->restore();
+        return back()->with('success', "User {$user->name} unbanned");
     }
 
     // User Ban/Unban
@@ -55,13 +61,6 @@ class AdminController extends Controller
     {
         $user->delete();
         return back()->with('success', "User {$user->name} banned");
-    }
-
-    public function unbanUser($id)
-    {
-        $user = User::withTrashed()->findOrFail($id);
-        $user->restore();
-        return back()->with('success', "User {$user->name} unbanned");
     }
 
     // Quiz Management
