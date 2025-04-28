@@ -6,6 +6,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Route;
 use App\Events\TestEvent;
+use App\Http\Controllers\AdminController;
 
 // Public Routes
 Route::get('/', function () {
@@ -68,13 +69,24 @@ Route::middleware(['auth', 'student'])->prefix('student')->group(function () {
     Route::get('/results/{result}', [StudentController::class, 'quizResults'])->name('student.quiz.results');
 });
 
-Route::get('/test-broadcast', function () {
-    broadcast(new TestEvent());
-    return 'Broadcast sent';
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    // dashboard
+    Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
+    // teacher Approval
+    Route::get('/teachers/pending', [AdminController::class, 'pendingTeachers'])->name('admin.teachers.pending');
+    Route::post('/teachers/{teacher}/approve', [AdminController::class, 'approveTeacher'])->name('admin.teachers.approve');
+    Route::post('/teachers/{teacher}/reject', [AdminController::class, 'rejectTeacher'])->name('admin.teachers.reject');
+
+    // user Management
+    Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
+    Route::delete('/users/{user}/ban', [AdminController::class, 'banUser'])->name('admin.users.ban');
+    Route::post('/users/{id}/unban', [AdminController::class, 'unbanUser'])->name('admin.users.unban');
+
+    // quiz Management
+    Route::get('/quizzes', [AdminController::class, 'quizzes'])->name('admin.quizzes');
+    Route::delete('/quizzes/{quiz}', [AdminController::class, 'deleteQuiz'])->name('admin.quizzes.delete');
 });
-
-
-
 // Fallback Route
 Route::fallback(function () {
     return redirect('/login');
