@@ -2,10 +2,10 @@
 
 @section('content')
 <div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold mb-6">Pending Teacher Approvals</h1>
+    <h1 class="text-2xl font-bold mb-6">Teacher Management</h1>
 
     @if($teachers->isEmpty())
-        <p>No pending teacher requests.</p>
+        <p>No teachers requiring approval.</p>
     @else
         <div class="bg-white rounded shadow overflow-hidden">
             @foreach($teachers as $teacher)
@@ -13,7 +13,7 @@
                 <div>
                     <h3 class="font-medium">{{ $teacher->name }}</h3>
                     <p class="text-gray-600">{{ $teacher->email }}</p>
-                    <p class="text-sm text-yellow-600">Pending since {{ $teacher->created_at->diffForHumans() }}</p>
+                    <p class="text-sm">Registered {{ $teacher->created_at->diffForHumans() }}</p>
                 </div>
                 <div class="flex space-x-2">
                     <form method="POST" action="{{ route('admin.teachers.approve', $teacher) }}">
