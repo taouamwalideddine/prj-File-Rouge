@@ -38,7 +38,6 @@ class AdminController extends Controller
 
     public function approveTeacher(User $teacher)
     {
-        // Create classroom for approved teacher
         Classroom::create([
             'name' => $teacher->name . "'s Class",
             'teacher_id' => $teacher->id
@@ -49,7 +48,7 @@ class AdminController extends Controller
 
     public function rejectTeacher(User $teacher)
     {
-        $teacher->delete(); // Soft delete to reject
+        $teacher->delete();
         return back()->with('success', 'Teacher request rejected');
     }
 
@@ -76,7 +75,6 @@ class AdminController extends Controller
         return back()->with('success', "User {$user->name} banned");
     }
 
-    // Quiz Management
     public function quizzes()
     {
         return view('admin.quizzes.index', [
