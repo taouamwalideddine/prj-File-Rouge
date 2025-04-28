@@ -20,26 +20,26 @@ class AdminController extends Controller
     }
 
     // Teacher Approval
-    public function pendingTeachers()
-    {
-        return view('admin.teachers.pending', [
-            'teachers' => User::where('role', 'teacher')
-                            ->where('status', 'pending')
-                            ->paginate(10)
-        ]);
-    }
+public function pendingTeachers()
+{
+    return view('admin.teachers.pending', [
+        'teachers' => User::where('role', 'teacher')
+                        ->where('status', 'pending')
+                        ->paginate(10)
+    ]);
+}
 
-    public function approveTeacher(User $teacher)
-    {
-        $teacher->update(['status' => 'approved']);
-        return back()->with('success', "Teacher {$teacher->name} approved");
-    }
+public function approveTeacher(User $teacher)
+{
+    $teacher->update(['status' => 'approved']);
+    return back()->with('success', "Teacher {$teacher->name} approved");
+}
 
-    public function rejectTeacher(User $teacher)
-    {
-        $teacher->update(['status' => 'rejected']);
-        return back()->with('success', "Teacher {$teacher->name} rejected");
-    }
+public function rejectTeacher(User $teacher)
+{
+    $teacher->update(['status' => 'rejected']);
+    return back()->with('success', "Teacher {$teacher->name} rejected");
+}
 
     // User Ban/Unban
     public function users()
