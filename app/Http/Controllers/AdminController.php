@@ -12,40 +12,46 @@ class AdminController extends Controller
     public function dashboard()
     {
         return view('admin.dashboard', [
+            // Teachers without classrooms are considered "pending"
             'pendingTeachers' => User::where('role', 'teacher')
-                                  ->where('status', 'pending')
+                                  ->doesntHave('classroom')
+                                  ->whereNull('deleted_at')
                                   ->count(),
+
+            // Banned users (soft-deleted)
             'bannedUsers' => User::onlyTrashed()->count(),
+
+            // Total quizzes
             'quizzesCount' => Quiz::count()
         ]);
     }
 
-    // Teacher Approval
-public function pendingTeachers()
-{
-    return view('admin.teachers.pending', [
-        'teachers' => User::where('role', 'teacher')
-                        ->whereNull('deleted_at')
-                        ->doesntHave('classroom')
-                        ->paginate(10)
-    ]);
-}
+    public function pendingTeachers()
+    {
+        return view('admin.teachers.pending', [
+            'teachers' => User::where('role', 'teacher')
+                            ->doesntHave('classroom')
+                            ->whereNull('deleted_at')
+                            ->paginate(10)
+        ]);
+    }
 
-public function approveTeacher(User $teacher)
-{
-    Classroom::create([
-        'name' => $teacher->name . "'s Classroom",
-        'teacher_id' => $teacher->id
-    ]);
+    public function approveTeacher(User $teacher)
+    {
+        // Create classroom for approved teacher
+        Classroom::create([
+            'name' => $teacher->name . "'s Class",
+            'teacher_id' => $teacher->id
+        ]);
 
-    return back()->with('success', "Teacher {$teacher->name} approved and classroom created");
-}
+        return back()->with('success', 'Teacher approved and classroom created');
+    }
 
-public function rejectTeacher(User $teacher)
-{
-    $teacher->delete();
-    return back()->with('success', "Teacher {$teacher->name} rejected");
-}
+    public function rejectTeacher(User $teacher)
+    {
+        $teacher->delete(); // Soft delete to reject
+        return back()->with('success', 'Teacher request rejected');
+    }
 
     public function unbanUser($id)
     {
