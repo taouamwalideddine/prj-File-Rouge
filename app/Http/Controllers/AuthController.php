@@ -50,7 +50,7 @@ public function register(Request $request)
     $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|email|unique:users',
-        'password' => 'required|confirmed|min:8',
+        'password' => 'required|confirmed|min:4',
         'role' => 'required|in:student,teacher'
     ]);
 

@@ -15,20 +15,20 @@ public function dashboard()
     $userId = Auth::id();
     $hasClassroom = Classroom::where('teacher_id', $userId)->exists();
 
-    $data = [
-        'isApproved' => $hasClassroom
-    ];
-
     if ($hasClassroom) {
-        $classroom = Classroom::withCount(['students', 'quizzes', 'pendingRequests'])
-                           ->where('teacher_id', $userId)
-                           ->first();
+        $classroom = Classroom::where('teacher_id', $userId)->first();
+        $recentQuizzes = $classroom->quizzes()->latest()->take(3)->get();
 
-        $data['classroom'] = $classroom;
-        $data['recentActivity'] = $classroom->activities()->latest()->take(5)->get();
+        return view('teacher.dashboard', [
+            'classroom' => $classroom,
+            'recentQuizzes' => $recentQuizzes,
+            'isApproved' => true
+        ]);
     }
 
-    return view('teacher.dashboard', $data);
+    return view('teacher.dashboard', [
+        'isApproved' => false
+    ]);
 }
 
     public function manageClassroom()
