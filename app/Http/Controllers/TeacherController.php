@@ -10,26 +10,15 @@ use Illuminate\Support\Facades\Auth;
 
 class TeacherController extends Controller
 {
-    public function dashboard()
-    {
-        $teacher = Auth::user();
-        $classroom = $teacher->classroom;
+public function dashboard()
+{
+    $userId = Auth::id();
+    $hasClassroom = Classroom::where('teacher_id', $userId)->exists();
 
-        if (!$classroom) {
-            $classroom = Classroom::create([
-                'name' => $teacher->name . "'s Class",
-                'teacher_id' => $teacher->id
-            ]);
-        }
-
-        return view('teacher.dashboard', [
-            'classroom' => $classroom,
-            'pendingRequests' => $classroom->pendingRequests()->count(),
-            'studentCount' => $classroom->acceptedStudents()->count(),
-            'quizzes' => $classroom->quizzes()->latest()->get(),
-            'recentQuizzes' => $classroom->quizzes()->latest()->take(3)->get()
-        ]);
-    }
+    return view('teacher.dashboard', [
+        'isApproved' => $hasClassroom
+    ]);
+}
 
     public function manageClassroom()
     {

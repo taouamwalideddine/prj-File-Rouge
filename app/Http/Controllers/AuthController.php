@@ -45,26 +45,31 @@ class AuthController extends Controller
         ]);
     }
 
-    public function register(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed|min:4',
-            'role' => 'required|in:student,teacher'
-        ]);
+public function register(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|confirmed|min:8',
+        'role' => 'required|in:student,teacher'
+    ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => $request->role
-        ]);
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'role' => $request->role
+    ]);
 
+    if ($user->role === 'teacher') {
         Auth::login($user);
-
-        return redirect()->route($user->role . '.dashboard');
+        return redirect()->route('teacher.dashboard')
+                       ->with('info', 'Your account is pending admin approval');
     }
+
+    Auth::login($user);
+    return redirect()->route('student.dashboard');
+}
 
     public function logout(Request $request)
     {

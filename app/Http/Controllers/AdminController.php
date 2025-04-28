@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Classroom;
 use App\Models\Quiz;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -20,25 +21,31 @@ class AdminController extends Controller
     }
 
     // Teacher Approval
-    public function pendingTeachers()
-    {
-        return view('admin.teachers.pending', [
-            'teachers' => User::where('role', 'teacher')
-                            ->whereNull('deleted_at')
-                            ->paginate(10)
-        ]);
-    }
+public function pendingTeachers()
+{
+    return view('admin.teachers.pending', [
+        'teachers' => User::where('role', 'teacher')
+                        ->whereNull('deleted_at')
+                        ->doesntHave('classroom')
+                        ->paginate(10)
+    ]);
+}
 
-    public function approveTeacher(User $teacher)
-    {
-        return back()->with('success', "Teacher {$teacher->name} approved");
-    }
+public function approveTeacher(User $teacher)
+{
+    Classroom::create([
+        'name' => $teacher->name . "'s Classroom",
+        'teacher_id' => $teacher->id
+    ]);
 
-    public function rejectTeacher(User $teacher)
-    {
-        $teacher->delete();
-        return back()->with('success', "Teacher {$teacher->name} rejected");
-    }
+    return back()->with('success', "Teacher {$teacher->name} approved and classroom created");
+}
+
+public function rejectTeacher(User $teacher)
+{
+    $teacher->delete();
+    return back()->with('success', "Teacher {$teacher->name} rejected");
+}
 
     public function unbanUser($id)
     {
