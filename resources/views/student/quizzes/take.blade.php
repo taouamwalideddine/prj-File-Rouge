@@ -136,11 +136,11 @@ document.addEventListener('DOMContentLoaded', function() {
         timerText.textContent = timeLeft;
 
         if (timeLeft <= 3) {
-            timerCircle.setAttribute('stroke', '#ef4444'); // red
+            timerCircle.setAttribute('stroke', '#ef4444');
         } else if (timeLeft <= 7) {
-            timerCircle.setAttribute('stroke', '#f59e0b'); // orange
+            timerCircle.setAttribute('stroke', '#f59e0b');
         } else {
-            timerCircle.setAttribute('stroke', '#3b82f6'); // blue
+            timerCircle.setAttribute('stroke', '#3b82f6');
         }
     }
 
@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Navigation
+    // navigation
     function saveCurrentAnswer() {
         const selected = document.querySelector('input[name="current_answer"]:checked');
         if (selected) {
@@ -175,13 +175,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Event listeners
+    // event listeners
     document.getElementById('nextBtn').addEventListener('click', advanceQuestion);
 
     document.getElementById('quizForm').addEventListener('submit', function(e) {
         saveCurrentAnswer();
 
-        // Prepare all answers for submission
+        // prepare all answers for submission
         const hiddenInputs = Object.entries(answers).map(([questionId, answerId]) => {
             const input = document.createElement('input');
             input.type = 'hidden';
@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return input;
         });
 
-        // Clear and add new hidden inputs
+        // clear and add new hidden inputs
         const hiddenContainer = document.createElement('div');
         hiddenInputs.forEach(input => hiddenContainer.appendChild(input));
         this.appendChild(hiddenContainer);
