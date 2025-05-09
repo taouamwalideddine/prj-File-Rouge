@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\QuizPublished;
 use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\QuizResult;

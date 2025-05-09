@@ -12,16 +12,12 @@ class AdminController extends Controller
     public function dashboard()
     {
         return view('admin.dashboard', [
-            // Teachers without classrooms are considered "pending"
             'pendingTeachers' => User::where('role', 'teacher')
                                   ->doesntHave('classroom')
                                   ->whereNull('deleted_at')
                                   ->count(),
-
-            // Banned users (soft-deleted)
+            //soft-deleted
             'bannedUsers' => User::onlyTrashed()->count(),
-
-            // Total quizzes
             'quizzesCount' => Quiz::count()
         ]);
     }
@@ -59,7 +55,6 @@ class AdminController extends Controller
         return back()->with('success', "User {$user->name} unbanned");
     }
 
-    // User Ban/Unban
     public function users()
     {
         return view('admin.users.index', [

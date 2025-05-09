@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
         updateTimerDisplay();
 
         const question = questions[index];
+        //injection dial les question
         questionContainer.innerHTML = `
             <div class="question-card p-4 border rounded-lg mb-6">
                 <h3 class="font-medium mb-4">Question ${index + 1} of ${totalQuestions}</h3>
@@ -175,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // event listeners
+    // event listeners&
     document.getElementById('nextBtn').addEventListener('click', advanceQuestion);
 
     document.getElementById('quizForm').addEventListener('submit', function(e) {
@@ -205,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Start the quiz
+    // start the quiz
     initQuiz();
 });
 </script>
