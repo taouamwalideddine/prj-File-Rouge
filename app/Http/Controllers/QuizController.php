@@ -45,6 +45,8 @@ class QuizController extends Controller
             'classroom_id' => Auth::user()->classroom->id,
             'user_id' => Auth::id()
         ]);
+            return redirect()->route('teacher.quizzes.show', $quiz)
+           ->with('success', 'Quiz created successfully! Now add questions.');
     }
 
 public function show(Quiz $quiz)

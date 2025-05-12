@@ -1,26 +1,29 @@
-
 <?php
+abstract class Payment{
+    protected $amount;
+    protected static $count = 0;
 
-class user{
-    private $username;
-    private $password;
+    public function __construct($amount) {
+        $this->amount = $amount;
+        self::$count++;
+    }
+     abstract public function process();
 
+     public static function getCount(){
+        return self::$count;
+     }
+}
 
-    public function __construct($username,$password) {
-        $this->username = $username;
-        $this->password = $password;
-    }
-
-    public function getName(){
-        return $this->username;
-    }
-    public function setName($username){
-        $this->username =$username;
-    }
-    public function getpassword(){
-        return $this->password;
-    }
-    public function setpassword($password){
-        $this->password =$password;
+class CreditCard extends Payment{
+    public function process(){
+        return "{$this->amount} via credit card";
     }
 }
+
+class PayPal extends Payment{
+    public function process(){
+        return "{$this->amount} via credit Paypal";
+    }
+}
+$v1 = new CreditCard(10);
+echo $v1->process();

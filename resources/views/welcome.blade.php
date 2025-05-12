@@ -13,42 +13,6 @@
         .hero-gradient {
             background: linear-gradient(135deg, #4361ee, #3730a3, #4f46e5);
         }
-        .hover-lift {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .hover-lift:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        }
-        .feature-card {
-            transition: all 0.3s ease;
-        }
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        }
-        .card-icon {
-            transition: all 0.3s ease;
-        }
-        .feature-card:hover .card-icon {
-            transform: scale(1.1);
-        }
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        .animate-float {
-            animation: float 6s ease-in-out infinite;
-        }
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
-        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -239,7 +203,7 @@
             </div>
         </div>
     </footer>
-
+<!--
     <script>
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -250,6 +214,6 @@
                 });
             });
         });
-    </script>
+    </script> -->
 </body>
 </html>
